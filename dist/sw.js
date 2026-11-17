@@ -1,4 +1,4 @@
-const CACHE='curiosity-lab-v1-1-rooms-20261117',ROOT=new URL('./',self.location).href;
+const CACHE='curiosity-lab-v1-2-japanese-20261118',ROOT=new URL('./',self.location).href;
 const FILES=['./','./index.html','./style.css','./app.js','./rooms.js','./content.json','./manifest.webmanifest','./assets/icon-192.png','./assets/icon-512.png','./assets/space.jpg','./assets/jelly.jpg','./assets/forest.jpg','./assets/moon.jpg','./assets/ocean.jpg','./assets/city.jpg','./assets/history.jpg','./assets/laundry.jpg','./assets/kitchen.jpg','./assets/tools.jpg','./assets/writing.jpg'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(FILES.map(f=>new URL(f,ROOT).href))).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('curiosity-lab-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
