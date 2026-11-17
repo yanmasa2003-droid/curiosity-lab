@@ -1,0 +1,1 @@
+{"name":"curiosity-lab","version":"1.0.0","private":true,"type":"module","scripts":{"check":"node scripts/check.mjs","update":"node scripts/update.mjs","test":"node --test scripts/update.test.mjs"}}

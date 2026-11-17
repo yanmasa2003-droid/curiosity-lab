@@ -1,0 +1,8 @@
+[
+{"id":"lapis","category":"文化","image":"history","name":"Smithsonian National Museum of Asian Art","topic":"文化の中の青と素材の選択","url":"https://asia.si.edu/explore-art-culture/art-stories/colors/blue/"},
+{"id":"gps","category":"技術","image":"city","name":"NIST","topic":"GPSと相対性理論","url":"https://www.nist.gov/atomic-clocks/a-powerful-tool-for-science/putting-einstein-test"},
+{"id":"moonface","category":"宇宙","image":"moon","name":"NASA","topic":"月の自転といつも同じ面が見える理由","url":"https://science.nasa.gov/moon/facts/"},
+{"id":"blueart","category":"歴史","image":"history","name":"The Metropolitan Museum of Art","topic":"古代彫刻にあった色彩","url":"https://www.metmuseum.org/exhibitions/chroma"},
+{"id":"gray","category":"心理","image":"forest","name":"Exploratorium","topic":"周囲の色で明るさの知覚が変化する","url":"https://www.exploratorium.edu/snacks/gray-step"},
+{"id":"second","category":"日常","image":"city","name":"NIST","topic":"一秒はどう定義されるか","url":"https://www.nist.gov/how-do-you-measure-it/how-do-you-measure-second"}
+]
