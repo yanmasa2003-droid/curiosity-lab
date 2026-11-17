@@ -32,7 +32,10 @@
     ],
     "checked": "2026-11-17",
     "published": "2026-11-17",
-    "number": 0
+    "number": 0,
+    "rooms": [
+      "civilization"
+    ]
   },
   {
     "id": "gps",
@@ -67,7 +70,10 @@
     ],
     "checked": "2026-11-17",
     "published": "2026-11-17",
-    "number": 0
+    "number": 0,
+    "rooms": [
+      "tools"
+    ]
   },
   {
     "id": "second",
@@ -102,7 +108,11 @@
     ],
     "checked": "2026-11-17",
     "published": "2026-11-17",
-    "number": 0
+    "number": 0,
+    "rooms": [
+      "tools",
+      "civilization"
+    ]
   },
   {
     "id": "iridescence",
@@ -137,7 +147,10 @@
     ],
     "checked": "2026-11-17",
     "published": "2026-11-17",
-    "number": 0
+    "number": 0,
+    "rooms": [
+      "nature"
+    ]
   },
   {
     "id": "springtide",
@@ -172,7 +185,10 @@
     ],
     "checked": "2026-11-17",
     "published": "2026-11-17",
-    "number": 0
+    "number": 0,
+    "rooms": [
+      "nature"
+    ]
   },
   {
     "id": "afterimage",
@@ -207,6 +223,9 @@
     ],
     "checked": "2026-11-17",
     "published": "2026-11-17",
-    "number": 0
+    "number": 0,
+    "rooms": [
+      "mind"
+    ]
   }
 ]

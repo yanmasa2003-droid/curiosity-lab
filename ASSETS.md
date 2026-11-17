@@ -12,4 +12,9 @@ All photographs are thematic editorial images, not diagrams or definitive photog
 | ocean.jpg | https://images.unsplash.com/photo-1518837695005-2083093ee35b |
 | city.jpg | https://images.unsplash.com/photo-1519501025264-65ba15a82390 |
 
+| laundry.jpg | https://images.unsplash.com/photo-1517677208171-0bc6725a3e60 |
+| kitchen.jpg | https://images.unsplash.com/photo-1556911220-bff31c812dba |
+| tools.jpg | https://images.unsplash.com/photo-1505740420928-5e560c06d30e |
+| writing.jpg | https://images.unsplash.com/photo-1455390582262-044cdead277a |
+
 Unsplash license: https://unsplash.com/license . Icons are original SVG and PNG. Google Fonts Noto Sans JP and Noto Serif JP use the SIL Open Font License; system fallback is available offline. Video thumbnails are loaded from YouTube only for corresponding official embedded players.
