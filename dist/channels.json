@@ -1,0 +1,934 @@
+{
+  "version": 1,
+  "updated": "2026-11-20",
+  "channels": [
+    {
+      "id": "sam",
+      "name": "サムの本解説ch",
+      "url": "https://www.youtube.com/channel/UCcdd3kS52T9Zyo-SWfj86bA",
+      "tags": [
+        "本と思想",
+        "心と行動"
+      ],
+      "formats": [
+        "図解で見る"
+      ],
+      "rooms": [
+        "mind",
+        "communication"
+      ],
+      "articles": [
+        "choice",
+        "teachback"
+      ],
+      "catch": "本をきっかけに、日常の考え方をひらく。",
+      "description": "心理・習慣・学びに関わる本の解説から、気になる一冊へ。",
+      "entry": "学び方や習慣の本を選び、著者の主張と自分の経験を比べる。",
+      "note": "本の要約は原著全体ではありません。気になった条件や根拠は原著にも寄り道を。",
+      "origin": "favorite",
+      "language": "ja",
+      "checked": "2026-11-20",
+      "verification": "public-channel-metadata"
+    },
+    {
+      "id": "ashi",
+      "name": "考えすぎる葦",
+      "url": "https://www.youtube.com/channel/UCwkAl3Fxd69mDEcQjX7NZsQ",
+      "tags": [
+        "心と行動",
+        "社会と歴史"
+      ],
+      "formats": [
+        "図解で見る"
+      ],
+      "rooms": [
+        "mind",
+        "communication"
+      ],
+      "articles": [
+        "choice",
+        "plain"
+      ],
+      "catch": "当たり前の気持ちにも、まだ別の見方がある。",
+      "description": "身近な疑問を科学・心理学・社会学などから眺める入口。",
+      "entry": "自分にも覚えのある行動を一つ選んで、説明の切り口を楽しむ。",
+      "note": "一般的な傾向が、一人ひとりの行動の理由を決めるわけではありません。",
+      "origin": "favorite",
+      "language": "ja",
+      "checked": "2026-11-20",
+      "verification": "public-channel-metadata"
+    },
+    {
+      "id": "bubu",
+      "name": "ぶーぶーざっくり解説",
+      "url": "https://www.youtube.com/channel/UCMlyjv59rW7nbK09UsonA-w",
+      "tags": [
+        "科学と宇宙",
+        "心と行動"
+      ],
+      "formats": [
+        "図解で見る"
+      ],
+      "rooms": [
+        "nature",
+        "mind"
+      ],
+      "articles": [
+        "stardust",
+        "chance"
+      ],
+      "catch": "難しそうな話を、まずはざっくり。",
+      "description": "イラストで科学の疑問に入っていく解説。",
+      "entry": "聞いたことのある現象を選び、仕組みが気になったらラボの出典へ。",
+      "note": "興味を持つ入口として。簡略化された説明と詳しい条件を分けて受け取ります。",
+      "origin": "favorite",
+      "language": "ja",
+      "checked": "2026-11-20",
+      "verification": "public-channel-metadata"
+    },
+    {
+      "id": "vaience",
+      "name": "VAIENCE バイエンス",
+      "url": "https://www.youtube.com/channel/UCPKsFwt9ACF-EnJM3xN8wyQ",
+      "tags": [
+        "科学と宇宙",
+        "生き物と自然"
+      ],
+      "formats": [
+        "図解で見る"
+      ],
+      "rooms": [
+        "nature",
+        "play"
+      ],
+      "articles": [
+        "stardust",
+        "clock"
+      ],
+      "catch": "もしも、から始まる科学への旅。",
+      "description": "宇宙や自然の不思議を、想像を広げながら楽しむ。",
+      "entry": "宇宙の大きさや時間の話から、身近な物理へ戻ってみる。",
+      "note": "仮定を置いた話と観測で確かめた事実を区別して楽しみます。",
+      "origin": "favorite",
+      "language": "ja",
+      "checked": "2026-11-20",
+      "verification": "public-channel-metadata"
+    },
+    {
+      "id": "digital",
+      "name": "ゆっくりデジタルの裏側",
+      "url": "https://www.youtube.com/channel/UCOBwoUZV1RYl5ITFeJSU9SA",
+      "tags": [
+        "技術と道具",
+        "社会と歴史"
+      ],
+      "formats": [
+        "図解で見る"
+      ],
+      "rooms": [
+        "tools",
+        "play"
+      ],
+      "articles": [
+        "noise",
+        "clock"
+      ],
+      "catch": "見慣れたデジタルに、知らない歴史がある。",
+      "description": "機器や規格の「なぜ」を、裏側の仕組みからたどる。",
+      "entry": "ケーブルや音、古い機器など、使ったことのある物から。",
+      "note": "製品・規格の情報は時期で変わるため、購入や設定時は公式資料も確認します。",
+      "origin": "favorite",
+      "language": "ja",
+      "checked": "2026-11-20",
+      "verification": "public-channel-metadata"
+    },
+    {
+      "id": "wired",
+      "name": "WIRED.jp",
+      "url": "https://www.youtube.com/channel/UC7rWtV-JngmNWe01-zkI21A",
+      "tags": [
+        "技術と道具",
+        "文化と芸術",
+        "社会と歴史"
+      ],
+      "formats": [
+        "実物で見る",
+        "対談を聞く"
+      ],
+      "rooms": [
+        "tools",
+        "communication"
+      ],
+      "articles": [
+        "noise",
+        "teachback"
+      ],
+      "catch": "専門家の目で、世界を見直す。",
+      "description": "専門家への質問や実演から、技術・文化・人の知恵へ。",
+      "entry": "自分が全く知らない職業や分野の専門家の説明を選ぶ。",
+      "note": "日本語音声・日本語字幕のある動画を選んでください。字幕設定は動画ごとに確認できます。",
+      "origin": "favorite",
+      "language": "ja",
+      "checked": "2026-11-20",
+      "verification": "public-channel-metadata"
+    },
+    {
+      "id": "abema",
+      "name": "ABEMA Prime #アベプラ",
+      "url": "https://www.youtube.com/channel/UCB1dgsqLiEp57oDAyNV_vww",
+      "tags": [
+        "社会と歴史",
+        "心と行動"
+      ],
+      "formats": [
+        "対談を聞く"
+      ],
+      "rooms": [
+        "civilization",
+        "mind"
+      ],
+      "articles": [
+        "choice",
+        "plain"
+      ],
+      "catch": "一つのテーマを、違う立場から。",
+      "description": "社会の論点や当事者の経験を、対話から考える。",
+      "entry": "結論を急がず、同じ問いに対する立場の違いを追う。",
+      "note": "出演者の意見・経験と、確認された事実を分けて見るための入口です。",
+      "origin": "favorite",
+      "language": "ja",
+      "checked": "2026-11-20",
+      "verification": "public-channel-metadata"
+    },
+    {
+      "id": "goro",
+      "name": "山田五郎 オトナの教養講座",
+      "url": "https://www.youtube.com/channel/UCq1r8Nq3nwI9VhvyiwcpF2w",
+      "tags": [
+        "文化と芸術",
+        "社会と歴史"
+      ],
+      "formats": [
+        "図解で見る",
+        "対談を聞く"
+      ],
+      "rooms": [
+        "civilization"
+      ],
+      "articles": [
+        "lapis",
+        "color"
+      ],
+      "catch": "一枚の絵から、時代が広がる。",
+      "description": "作品とその背景をたどる、美術への寄り道。",
+      "entry": "好きな色や気になる絵から、素材や時代の背景へ。",
+      "note": "作品の解釈と、資料で確認できる来歴を分けて楽しみます。",
+      "origin": "favorite",
+      "language": "ja",
+      "checked": "2026-11-20",
+      "verification": "public-channel-metadata"
+    },
+    {
+      "id": "pragra",
+      "name": "ぷらぐら",
+      "url": "https://www.youtube.com/channel/UC9yE5zNQtT-sItF53GfQs7w",
+      "tags": [
+        "技術と道具",
+        "遊びと発想"
+      ],
+      "formats": [
+        "図解で見る"
+      ],
+      "rooms": [
+        "tools",
+        "play"
+      ],
+      "articles": [
+        "noise",
+        "chance"
+      ],
+      "catch": "ソフトやプログラムも、遊びの材料。",
+      "description": "PC・ブラウザー・プログラミングを、身近な発見へ。",
+      "entry": "普段使うブラウザーや、意外なプログラムの話から。",
+      "note": "紹介ソフトの動作環境や料金は、導入前に公式サイトで確認してください。",
+      "origin": "favorite",
+      "language": "ja",
+      "checked": "2026-11-20",
+      "verification": "public-channel-metadata"
+    },
+    {
+      "id": "webmania",
+      "name": "ウェブマニア",
+      "url": "https://www.youtube.com/channel/UCvpDuJLRV07mTu6gh9CGq0w",
+      "tags": [
+        "技術と道具",
+        "遊びと発想"
+      ],
+      "formats": [
+        "図解で見る",
+        "実物で見る"
+      ],
+      "rooms": [
+        "tools",
+        "play"
+      ],
+      "articles": [
+        "noise",
+        "fridge"
+      ],
+      "catch": "知らなかった便利さに、会いにいく。",
+      "description": "Webサービス・ツール・ガジェットを実際の使い方から知る。",
+      "entry": "今の端末で使える小さな工夫を、一つだけ探す。",
+      "note": "機能・利用料金・権限は変わるため、導入時に配布元を確認してください。",
+      "origin": "favorite",
+      "language": "ja",
+      "checked": "2026-11-20",
+      "verification": "public-channel-metadata"
+    },
+    {
+      "id": "losers",
+      "name": "ゆっくりルーザーズ",
+      "url": "https://www.youtube.com/channel/UCgaGnTwMi4vMGpuFpeSotYA",
+      "tags": [
+        "社会と歴史",
+        "技術と道具"
+      ],
+      "formats": [
+        "図解で見る"
+      ],
+      "rooms": [
+        "civilization"
+      ],
+      "articles": [
+        "money",
+        "railtime"
+      ],
+      "catch": "うまくいかなかった話にも、仕組みがある。",
+      "description": "企業や商品の事例から、社会や市場の変化を考える。",
+      "entry": "知っている企業や商品の事例を選び、当時の条件を想像する。",
+      "note": "事例の編集や後世の評価も含む解説です。一つの原因だけで失敗を決めつけません。",
+      "origin": "favorite",
+      "language": "ja",
+      "checked": "2026-11-20",
+      "verification": "public-channel-metadata"
+    },
+    {
+      "id": "mental",
+      "name": "ゆっくりメンタルクリニック",
+      "url": "https://www.youtube.com/channel/UC3sjwZjNf9K2qAYDiMWOvIQ",
+      "tags": [
+        "心と行動"
+      ],
+      "formats": [
+        "図解で見る"
+      ],
+      "rooms": [
+        "mind"
+      ],
+      "articles": [
+        "choice",
+        "teachback"
+      ],
+      "catch": "こころの話を、言葉にしてみる。",
+      "description": "精神医学を身近に感じるための解説。",
+      "entry": "気になる言葉の意味から、心の仕組みへの関心を広げる。",
+      "note": "教養としての視聴入口です。自己診断や個別の治療判断には用いません。",
+      "origin": "favorite",
+      "language": "ja",
+      "checked": "2026-11-20",
+      "verification": "public-channel-metadata"
+    },
+    {
+      "id": "rui",
+      "name": "るーいのゆっくり科学",
+      "url": "https://www.youtube.com/channel/UCJHZshDuIrd_6MaT8MIjFtg",
+      "tags": [
+        "科学と宇宙",
+        "生き物と自然"
+      ],
+      "formats": [
+        "図解で見る"
+      ],
+      "rooms": [
+        "nature",
+        "play"
+      ],
+      "articles": [
+        "glow",
+        "chance"
+      ],
+      "catch": "日常の「なぜ」を、科学でほどく。",
+      "description": "宇宙・生物・物質など、科学の疑問を楽しむ。",
+      "entry": "植物と化学のつながりや、時間の感じ方などの身近な疑問から。",
+      "note": "動画の説明と個別の健康判断は分けて受け取ります。",
+      "origin": "discovery",
+      "language": "ja",
+      "checked": "2026-11-20",
+      "verification": "public-channel-metadata"
+    },
+    {
+      "id": "dream",
+      "name": "サイエンスドリーム",
+      "url": "https://www.youtube.com/channel/UCDy22j1Z7jDpyI14KWVgmQQ",
+      "tags": [
+        "生き物と自然",
+        "科学と宇宙"
+      ],
+      "formats": [
+        "図解で見る"
+      ],
+      "rooms": [
+        "nature"
+      ],
+      "articles": [
+        "camouflage",
+        "forest"
+      ],
+      "catch": "その姿になるまでの、長い物語。",
+      "description": "生物の起源や進化を、今の姿からさかのぼる。",
+      "entry": "身近な動物と、意外な親戚関係の話から。",
+      "note": "進化の仮説や研究の更新もある分野です。新しい発見にも目を向けます。",
+      "origin": "discovery",
+      "language": "ja",
+      "checked": "2026-11-20",
+      "verification": "public-channel-metadata"
+    },
+    {
+      "id": "yurucom",
+      "name": "ゆるコンピュータ科学ラジオ",
+      "url": "https://www.youtube.com/channel/UCpLu0KjNy616-E95gPx7LZg",
+      "tags": [
+        "技術と道具",
+        "遊びと発想"
+      ],
+      "formats": [
+        "対談を聞く"
+      ],
+      "rooms": [
+        "tools",
+        "play"
+      ],
+      "articles": [
+        "clock",
+        "noise"
+      ],
+      "catch": "コンピュータの話は、考え方の話。",
+      "description": "仕組みや歴史を、掛け合いと寄り道で楽しむ。",
+      "entry": "プログラミング経験がなくても、仕組みへの疑問から選べます。",
+      "note": "対談の比喩や冗談と技術の仕様は区別して楽しみます。",
+      "origin": "discovery",
+      "language": "ja",
+      "checked": "2026-11-20",
+      "verification": "public-channel-metadata"
+    },
+    {
+      "id": "yurugengo",
+      "name": "ゆる言語学ラジオ",
+      "url": "https://www.youtube.com/channel/UCmpkIzF3xFzhPez7gXOyhVg",
+      "tags": [
+        "言葉と学び",
+        "本と思想"
+      ],
+      "formats": [
+        "対談を聞く"
+      ],
+      "rooms": [
+        "communication"
+      ],
+      "articles": [
+        "plain",
+        "rosetta"
+      ],
+      "catch": "いつもの言葉を、初めて見る。",
+      "description": "日常の言葉から言語学へ、会話で広がる寄り道。",
+      "entry": "普段何気なく使う表現や、言葉の違いの話から。",
+      "note": "言語についての説や例は、その条件や参考文献にも注目して聞いてみてください。",
+      "origin": "discovery",
+      "language": "ja",
+      "checked": "2026-11-20",
+      "verification": "public-channel-metadata"
+    },
+    {
+      "id": "coten",
+      "name": "COTEN RADIO",
+      "url": "https://www.youtube.com/c/cotenradio",
+      "tags": [
+        "社会と歴史",
+        "本と思想"
+      ],
+      "formats": [
+        "対談を聞く"
+      ],
+      "rooms": [
+        "civilization"
+      ],
+      "articles": [
+        "railtime",
+        "money"
+      ],
+      "catch": "人の暮らしから、歴史を聴く。",
+      "description": "歴史を通して、社会・制度・人間を考える長い旅。",
+      "entry": "気になる人物や制度のシリーズを、最初の回から。",
+      "note": "歴史の解釈を含む対談です。異なる資料の見方も楽しめます。",
+      "origin": "discovery",
+      "language": "ja",
+      "checked": "2026-11-20",
+      "verification": "public-channel-metadata"
+    },
+    {
+      "id": "geo",
+      "name": "ジオヒストリー",
+      "url": "https://www.youtube.com/@geohistoryjp",
+      "tags": [
+        "社会と歴史"
+      ],
+      "formats": [
+        "図解で見る"
+      ],
+      "rooms": [
+        "civilization"
+      ],
+      "articles": [
+        "railtime",
+        "rosetta"
+      ],
+      "catch": "地図が動くと、歴史がつながる。",
+      "description": "地理と歴史を、場所の変化とともにたどる。",
+      "entry": "知っている国の成り立ちを、地図と一緒に追う。",
+      "note": "図は歴史を見通すために簡略化されています。複雑な経緯は参考資料へ。",
+      "origin": "discovery",
+      "language": "ja",
+      "checked": "2026-11-20",
+      "verification": "public-channel-metadata"
+    },
+    {
+      "id": "yurindo",
+      "name": "有隣堂しか知らない世界",
+      "url": "https://www.youtube.com/channel/UCmKlo3BXt60nzgk2r_JgvwQ",
+      "tags": [
+        "文化と芸術",
+        "技術と道具",
+        "言葉と学び"
+      ],
+      "formats": [
+        "実物で見る",
+        "対談を聞く"
+      ],
+      "rooms": [
+        "tools",
+        "communication"
+      ],
+      "articles": [
+        "lapis",
+        "plain"
+      ],
+      "catch": "詳しい人の好きが、こちらへ伝わる。",
+      "description": "本や文具、身近な物の奥深さを熱量と掛け合いで楽しむ。",
+      "entry": "いつも使う文房具や、気になった本の世界から。",
+      "note": "商品の紹介と教養の入口が一緒になった番組です。",
+      "origin": "discovery",
+      "language": "ja",
+      "checked": "2026-11-20",
+      "verification": "public-channel-metadata"
+    },
+    {
+      "id": "abataro",
+      "name": "アバタロー",
+      "url": "https://www.youtube.com/channel/UCduDJ6s3mMchYMy2HvqalxQ",
+      "tags": [
+        "本と思想",
+        "心と行動"
+      ],
+      "formats": [
+        "じっくり学ぶ"
+      ],
+      "rooms": [
+        "mind",
+        "civilization"
+      ],
+      "articles": [
+        "choice",
+        "color"
+      ],
+      "catch": "一冊の本で、問いを増やす。",
+      "description": "哲学や文学の名著を入口に、社会や生き方を考える。",
+      "entry": "ユートピアなど、暮らしと社会に触れる本の解説から。",
+      "note": "書評は著者の思想を読む一つの入口です。原著や別の解釈にも寄り道できます。",
+      "origin": "discovery",
+      "language": "ja",
+      "checked": "2026-11-20",
+      "verification": "public-channel-metadata"
+    },
+    {
+      "id": "philosophy",
+      "name": "哲学チャンネル",
+      "url": "https://www.youtube.com/channel/UCAmfstWXkAnAVBdfAci4bzA",
+      "tags": [
+        "本と思想",
+        "心と行動"
+      ],
+      "formats": [
+        "じっくり学ぶ"
+      ],
+      "rooms": [
+        "mind"
+      ],
+      "articles": [
+        "choice",
+        "color"
+      ],
+      "catch": "問いの名前を、知ってみる。",
+      "description": "哲学・心理学の考え方を、概念や思想家から学ぶ。",
+      "entry": "気になった問いに近い思想家を一人選ぶ。",
+      "note": "紹介される考え方は、唯一の結論ではなく比較するための材料です。",
+      "origin": "discovery",
+      "language": "ja",
+      "checked": "2026-11-20",
+      "verification": "public-channel-metadata"
+    },
+    {
+      "id": "kurare",
+      "name": "科学はすべてを解決する！",
+      "url": "https://www.youtube.com/channel/UC_sxCGl2slqyAj9i26KLKuA",
+      "tags": [
+        "科学と宇宙",
+        "技術と道具"
+      ],
+      "formats": [
+        "実物で見る",
+        "対談を聞く"
+      ],
+      "rooms": [
+        "tools",
+        "nature"
+      ],
+      "articles": [
+        "glow",
+        "eggs"
+      ],
+      "catch": "実験で、常識が少し動く。",
+      "description": "くられと薬理凶室による化学・実験・科学のエンタメ。",
+      "entry": "基礎化学や、身近な現象の解説シリーズから。",
+      "note": "実験映像は安全管理のある環境で行うものもあります。鑑賞と再現は分けます。",
+      "origin": "discovery",
+      "language": "ja",
+      "checked": "2026-11-20",
+      "verification": "public-channel-metadata"
+    },
+    {
+      "id": "hen",
+      "name": "へんないきものチャンネル",
+      "url": "https://www.youtube.com/channel/UC6SEj6I-vKEL9tL5aAHHyZg",
+      "tags": [
+        "生き物と自然"
+      ],
+      "formats": [
+        "図解で見る"
+      ],
+      "rooms": [
+        "nature"
+      ],
+      "articles": [
+        "camouflage",
+        "glow"
+      ],
+      "catch": "変わった生き物には、変わった理由。",
+      "description": "生き物の特徴や意外な暮らしを知る。",
+      "entry": "知っている動物の、知らなかった一面から。",
+      "note": "種や生息地による違いもあるため、すべての仲間へ一般化しません。",
+      "origin": "discovery",
+      "language": "ja",
+      "checked": "2026-11-20",
+      "verification": "public-channel-metadata"
+    },
+    {
+      "id": "jst",
+      "name": "SCIENCE CHANNEL（JST）",
+      "url": "https://www.youtube.com/channel/UCHpFyLQgg4h9VZuFyby7RbQ",
+      "tags": [
+        "科学と宇宙",
+        "技術と道具",
+        "生き物と自然"
+      ],
+      "formats": [
+        "実物で見る"
+      ],
+      "rooms": [
+        "tools",
+        "play"
+      ],
+      "articles": [
+        "fridge",
+        "curveball"
+      ],
+      "catch": "つくる工程に、科学が見える。",
+      "description": "THE MAKING、研究、自然観察を、実物の映像で楽しむ。",
+      "entry": "身の回りの製品ができるまでを追うTHE MAKINGから。",
+      "note": "動画の公開時点と、現在の技術の違いにも注目できます。",
+      "origin": "discovery",
+      "language": "ja",
+      "checked": "2026-11-20",
+      "verification": "public-channel-metadata"
+    },
+    {
+      "id": "monozukuri",
+      "name": "ものづくり太郎チャンネル",
+      "url": "https://www.youtube.com/channel/UCY9KXoezyo6cp-YwguOOCcg",
+      "tags": [
+        "技術と道具",
+        "社会と歴史"
+      ],
+      "formats": [
+        "実物で見る",
+        "対談を聞く"
+      ],
+      "rooms": [
+        "tools",
+        "civilization"
+      ],
+      "articles": [
+        "fridge",
+        "railtime"
+      ],
+      "catch": "製品の向こうに、工場と人がいる。",
+      "description": "製造業や産業技術を、企業や現場の話から知る。",
+      "entry": "ロボットや半導体など、使っている製品の裏側へ。",
+      "note": "取材・企業紹介・見解を含むため、将来予測と現状を分けて受け取ります。",
+      "origin": "discovery",
+      "language": "ja",
+      "checked": "2026-11-20",
+      "verification": "public-channel-metadata"
+    },
+    {
+      "id": "otona",
+      "name": "大人の教養TV",
+      "url": "https://www.youtube.com/channel/UCwZ5GUBnp82m6mpUwk-3ZGw",
+      "tags": [
+        "社会と歴史",
+        "文化と芸術"
+      ],
+      "formats": [
+        "じっくり学ぶ"
+      ],
+      "rooms": [
+        "civilization"
+      ],
+      "articles": [
+        "money",
+        "railtime"
+      ],
+      "catch": "気になる出来事から、背景へ。",
+      "description": "歴史・社会・政治経済を横断して考える入口。",
+      "entry": "名前だけ知っている制度や歴史の話から。",
+      "note": "事件や社会問題の説明には解釈も含まれます。個々の出典と条件も確かめます。",
+      "origin": "discovery",
+      "language": "ja",
+      "checked": "2026-11-20",
+      "verification": "public-channel-metadata"
+    },
+    {
+      "id": "mundi",
+      "name": "Historia Mundi ムンディ先生",
+      "url": "https://www.youtube.com/channel/UCzSU4Vjk2VBJFHPvB5SJxHA",
+      "tags": [
+        "社会と歴史",
+        "文化と芸術"
+      ],
+      "formats": [
+        "じっくり学ぶ"
+      ],
+      "rooms": [
+        "civilization"
+      ],
+      "articles": [
+        "railtime",
+        "rosetta"
+      ],
+      "catch": "出来事を、前後の流れでつなぐ。",
+      "description": "日本史・世界史の授業を、自分のペースでたどる。",
+      "entry": "単発の雑学の次に、同じ時代を続けて学びたいときに。",
+      "note": "授業形式のシリーズです。必要なところから見ても構いません。",
+      "origin": "discovery",
+      "language": "ja",
+      "checked": "2026-11-20",
+      "verification": "public-channel-metadata"
+    },
+    {
+      "id": "yobinori",
+      "name": "ヨビノリ 大学の数学・物理",
+      "url": "https://www.youtube.com/channel/UCqmWJJolqAgjIdLqK3zD1QQ",
+      "tags": [
+        "科学と宇宙",
+        "遊びと発想"
+      ],
+      "formats": [
+        "じっくり学ぶ"
+      ],
+      "rooms": [
+        "play",
+        "tools"
+      ],
+      "articles": [
+        "wave",
+        "chance"
+      ],
+      "catch": "なるほど、を式の先まで。",
+      "description": "数学や物理の理屈を、授業でじっくり理解する。",
+      "entry": "興味のある題材の入門から。前提が難しければ関連展示へ戻れます。",
+      "note": "動画ごとに前提知識が異なります。大学講座と入門の違いを見て選びます。",
+      "origin": "discovery",
+      "language": "ja",
+      "checked": "2026-11-20",
+      "verification": "public-channel-metadata"
+    },
+    {
+      "id": "discovery",
+      "name": "ディスカバリーチャンネル",
+      "url": "https://www.youtube.com/channel/UCxbY38ReXW3LbaviWUE4omg",
+      "tags": [
+        "生き物と自然",
+        "科学と宇宙",
+        "技術と道具"
+      ],
+      "formats": [
+        "実物で見る"
+      ],
+      "rooms": [
+        "nature",
+        "tools"
+      ],
+      "articles": [
+        "ocean",
+        "forest"
+      ],
+      "catch": "現場へ行くと、知識が景色になる。",
+      "description": "冒険・自然・科学技術などの実写番組を楽しむ。",
+      "entry": "実物を見たいテーマの、日本語版エピソードから。",
+      "note": "再現・演出を含む番組もあります。日本語音声・字幕は各動画で確認してください。",
+      "origin": "discovery",
+      "language": "ja",
+      "checked": "2026-11-20",
+      "verification": "public-channel-metadata"
+    },
+    {
+      "id": "rehacq",
+      "name": "ReHacQ リハック",
+      "url": "https://www.youtube.com/channel/UCG_oqDSlIYEspNpd2H4zWhw",
+      "tags": [
+        "社会と歴史",
+        "心と行動"
+      ],
+      "formats": [
+        "対談を聞く"
+      ],
+      "rooms": [
+        "civilization",
+        "mind"
+      ],
+      "articles": [
+        "choice",
+        "teachback"
+      ],
+      "catch": "答えの違いを、聞いてみる。",
+      "description": "対談を入口に、社会や人の考え方を比べる。",
+      "entry": "気になるテーマについて、出演者の前提や経験の違いを追う。",
+      "note": "出演者の意見を事実そのものと同一視せず、複数の見方を楽しみます。",
+      "origin": "discovery",
+      "language": "ja",
+      "checked": "2026-11-20",
+      "verification": "public-channel-metadata"
+    }
+  ],
+  "videos": [
+    {
+      "id": "ZDq6Xv9W-RQ",
+      "key": "ZDq6Xv9W-RQ",
+      "channel": "jst",
+      "title": "THE MAKING（334）鉄道模型ができるまで",
+      "provider": "SCIENCE CHANNEL（JST）",
+      "url": "https://www.youtube.com/watch?v=ZDq6Xv9W-RQ",
+      "language": "ja",
+      "relation": "related",
+      "level": "はじめの一本",
+      "checked": "2026-11-20",
+      "verification": "publisher-page",
+      "note": "小さな模型に部品・加工・塗装が集まる工程を観察。「冷蔵庫」の展示から、別のものづくりへ寄り道します。",
+      "articleId": "fridge"
+    },
+    {
+      "id": "9rGPwcp3CFA",
+      "key": "9rGPwcp3CFA",
+      "channel": "rui",
+      "title": "なぜ植物は薬になり動物は薬にならないのか？ ― 植物の生存戦略",
+      "provider": "るーいのゆっくり科学",
+      "url": "https://www.youtube.com/watch?v=9rGPwcp3CFA",
+      "language": "ja",
+      "relation": "related",
+      "level": "はじめの一本",
+      "checked": "2026-11-20",
+      "verification": "publisher-page",
+      "note": "生物がつくる化学物質を考える関連解説です。薬の服用方法を案内する動画としては扱いません。",
+      "articleId": "glow"
+    },
+    {
+      "id": "IRwbq4QwHJo",
+      "key": "IRwbq4QwHJo",
+      "channel": "dream",
+      "title": "眠れない夜に聞きたい動物の驚くべき起源と進化",
+      "provider": "サイエンスドリーム",
+      "url": "https://www.youtube.com/watch?v=IRwbq4QwHJo",
+      "language": "ja",
+      "relation": "related",
+      "level": "さらに深く",
+      "checked": "2026-11-20",
+      "verification": "publisher-page",
+      "note": "いろいろな動物の起源と進化をたどる長編。擬態だけでなく、生物の姿が変わる長い時間へ。",
+      "articleId": "camouflage"
+    },
+    {
+      "id": "BEV8U2bYXgw",
+      "key": "BEV8U2bYXgw",
+      "channel": "abataro",
+      "title": "ユートピア｜トマス・モア",
+      "provider": "アバタロー",
+      "url": "https://www.youtube.com/watch?v=BEV8U2bYXgw",
+      "language": "ja",
+      "relation": "related",
+      "level": "さらに深く",
+      "checked": "2026-11-20",
+      "verification": "publisher-page",
+      "note": "理想の社会とは何か。本の解説を入口に、選択や制度の見方を広げる関連映像です。",
+      "articleId": "choice"
+    },
+    {
+      "id": "UvIrXuWxWXQ",
+      "key": "UvIrXuWxWXQ",
+      "channel": "wired",
+      "title": "「世界の教育」について質問ある？｜Tech Support",
+      "provider": "WIRED.jp",
+      "url": "https://www.youtube.com/watch?v=UvIrXuWxWXQ",
+      "language": "ja",
+      "relation": "related",
+      "level": "はじめの一本",
+      "checked": "2026-11-20",
+      "verification": "publisher-page",
+      "note": "教え方の展示から、教育そのものへの問いへ。ティーチバック専用の実演ではありません。",
+      "articleId": "teachback"
+    },
+    {
+      "id": "WhzejO3UipA",
+      "key": "WhzejO3UipA",
+      "channel": "digital",
+      "title": "なぜケーブルは統一されないのか",
+      "provider": "ゆっくりデジタルの裏側",
+      "url": "https://www.youtube.com/watch?v=WhzejO3UipA",
+      "language": "ja",
+      "relation": "related",
+      "level": "はじめの一本",
+      "checked": "2026-11-20",
+      "verification": "publisher-page",
+      "note": "道具の裏側を、別のテーマでも楽しむ一本。ノイズキャンセリングそのものの説明ではありません。",
+      "articleId": "noise"
+    }
+  ]
+}

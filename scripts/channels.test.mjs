@@ -1,0 +1,15 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import vm from 'node:vm';
+import {validateChannels} from './channels-check.mjs';
+const catalog=JSON.parse(fs.readFileSync('dist/channels.json')),content=JSON.parse(fs.readFileSync('dist/content.json'));
+function runtime(persistResult=true){const ctx=vm.createContext({document:{addEventListener(){}},state:{saved:['stardust'],channelSaves:[]},persist:()=>persistResult,toast:()=>{},$:()=>null,data:content.articles,ROOMS:[],fixture:structuredClone(catalog)});vm.runInContext(fs.readFileSync('dist/channels.js','utf8')+'\nchannelCatalog=fixture;',ctx);return ctx}
+test('catalog connects 30 distinct Japanese channels and six real video IDs to existing exhibits',()=>assert.ok(validateChannels(catalog,content)));
+test('catalog refuses duplicate destinations and broken exhibit routes',()=>{const c=structuredClone(catalog);c.channels[1].url=c.channels[0].url;assert.throws(()=>validateChannels(c,content),/Duplicate channel URL/);c.channels[1].url=catalog.channels[1].url;c.videos[0].articleId='missing';assert.throws(()=>validateChannels(c,content),/Broken video exhibit/)});
+test('genre, viewing format, origin and query filters combine',()=>{const ctx=runtime();assert.equal(vm.runInContext("channelOrigin='favorite';channelCatalog.channels.filter(channelMatches).length",ctx),12);assert.equal(vm.runInContext("channelOrigin='discovery';channelCatalog.channels.filter(channelMatches).length",ctx),18);assert.equal(vm.runInContext("channelOrigin='all';channelGenre='技術と道具';channelFormat='実物で見る';channelQuery='JST';channelCatalog.channels.filter(channelMatches).map(c=>c.id).join(',')",ctx),'jst');assert.equal(vm.runInContext("channelQuery='存在しないチャンネル';channelCatalog.channels.filter(channelMatches).length",ctx),0)});
+test('saving and unsaving a channel preserves article collection',()=>{const ctx=runtime();vm.runInContext("toggleChannelSave('jst');toggleChannelSave('jst');toggleChannelSave('dream');",ctx);assert.equal(vm.runInContext("state.saved.join(',')",ctx),'stardust');assert.equal(vm.runInContext("state.channelSaves.join(',')",ctx),'dream');assert.equal(vm.runInContext("channelOrigin='saved';channelCatalog.channels.filter(channelMatches).map(c=>c.id).join(',')",ctx),'dream')});
+test('failed local persistence rolls back new channel save',()=>{const ctx=runtime(false);vm.runInContext("toggleChannelSave('jst')",ctx);assert.equal(vm.runInContext('state.channelSaves.length',ctx),0)});
+test('GPT handoff includes primary Japanese references without pretending to watch videos',()=>{const ctx=runtime();const text=vm.runInContext("channelBridge(channelById('jst'))",ctx);assert.match(text,/SCIENCE CHANNEL/);assert.match(text,/https:\/\//);assert.match(text,/視聴済みだとは仮定せず/);assert.match(text,/出典|日本語/)});
+
+test("malformed optional catalog is ignored before it can break article rendering",()=>{const ctx=runtime();assert.equal(vm.runInContext("validChannelCatalog({channels:[{}],videos:[]})",ctx),false);assert.equal(vm.runInContext("validChannelCatalog(null)",ctx),false);assert.equal(vm.runInContext("validChannelCatalog(fixture)",ctx),true)});
