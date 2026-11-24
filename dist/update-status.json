@@ -1,10 +1,14 @@
 {
   "version": 1,
-  "contentVersion": 5,
-  "lastAttempt": "2026-11-24T12:30:44.672Z",
+  "contentVersion": 6,
+  "lastAttempt": "2026-11-24T22:44:37.735Z",
   "lastAdded": "2026-11-25",
   "status": "published",
-  "remaining": 4,
+  "remaining": 3,
   "held": 0,
+  "videoResearch": {
+    "reviewedInputs": 0,
+    "awaitingEvidence": 182
+  },
   "schedule": "月・水・金 7:00（日本時間）"
 }
