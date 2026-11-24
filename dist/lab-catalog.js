@@ -2,6 +2,319 @@
 const LAB_GROUPS=[{"name":"社会と制度","en":"SOCIETY","ink":"#174f58","bg":"#d5ece8","image":"city"},{"name":"言葉と対話","en":"WORDS","ink":"#714c68","bg":"#f1e0eb","image":"writing"},{"name":"歴史と文化","en":"HISTORY","ink":"#805337","bg":"#f1e2cf","image":"history"},{"name":"芸術とデザイン","en":"ART","ink":"#4b4e8c","bg":"#e5e4f7","image":"tools"},{"name":"暮らしと料理","en":"EVERYDAY","ink":"#946039","bg":"#f7ead7","image":"kitchen"},{"name":"心理とデータ","en":"MIND","ink":"#805260","bg":"#f2e1dc","image":"forest"},{"name":"自然と生きもの","en":"NATURE","ink":"#416b44","bg":"#e2edda","image":"forest"},{"name":"科学と偶然","en":"SCIENCE","ink":"#386c88","bg":"#e1eef5","image":"ocean"}];
 const LAB_EXPERIMENTS=[
  {
+  "id": "seat-formulas",
+  "group": "社会と制度",
+  "title": "同じ票を、二つの式で数える",
+  "short": "票を固定して割り方だけ変える。",
+  "article": "seat-rounding",
+  "controls": [
+   {
+    "key": "a",
+    "label": "Aの票",
+    "min": 1,
+    "max": 100,
+    "value": 54,
+    "unit": "",
+    "step": 1,
+    "type": "range"
+   },
+   {
+    "key": "b",
+    "label": "Bの票",
+    "min": 1,
+    "max": 100,
+    "value": 33,
+    "unit": "",
+    "step": 1,
+    "type": "range"
+   },
+   {
+    "key": "c",
+    "label": "Cの票",
+    "min": 1,
+    "max": 100,
+    "value": 13,
+    "unit": "",
+    "step": 1,
+    "type": "range"
+   },
+   {
+    "key": "n",
+    "label": "議席数",
+    "min": 1,
+    "max": 20,
+    "value": 4,
+    "unit": "席",
+    "step": 1,
+    "type": "range"
+   }
+  ],
+  "prompt": "4議席でCが議席を得る方式を見つけてください。次に定数を1にして違いを比べます。",
+  "explain": "各枠で全党の商を比べます。すでに取った議席を k とすると、ドント式は k＋1、サンラグ式は 2k＋1 で得票を割るため、同じ票でも次の順位が変わります。",
+  "limit": "架空の3グループのモデルです。商が同点なら A→B→C の順。選挙法上の要件は扱いません。",
+  "preset": {
+   "n": 1
+  },
+  "references": [],
+  "checked": "2026-11-25"
+ },
+ {
+  "id": "meal-window",
+  "group": "暮らしと料理",
+  "title": "給食の見え方を、一日から一週間へ",
+  "short": "一日の記録と五日の平均を並べる。",
+  "article": "meal-snapshot",
+  "controls": [
+   {
+    "key": "series",
+    "label": "献立の週",
+    "options": [
+     "日によって違う週",
+     "そろった週"
+    ],
+    "value": 0,
+    "type": "select"
+   },
+   {
+    "key": "day",
+    "label": "注目する曜日",
+    "min": 1,
+    "max": 5,
+    "value": 1,
+    "unit": "日目",
+    "step": 1,
+    "type": "range"
+   }
+  ],
+  "prompt": "一日目の差を確認し、週の平均と見比べてください。",
+  "explain": "表示した架空の週は、毎日の振れが違っても平均は同じです。ほかの日をクリックする代わりに、曜日のつまみを動かして観察範囲がどう変わるか確かめられます。",
+  "limit": "指数は理解のための架空の値です。実際の給食の重量、栄養量、必要量、献立の評価は表しません。",
+  "preset": {
+   "series": 1
+  },
+  "references": [],
+  "checked": "2026-11-25"
+ },
+ {
+  "id": "sound-sync",
+  "group": "芸術とデザイン",
+  "title": "箱が床に触れたのは、どの音？",
+  "short": "同じ動きに、違う素材とタイミングを合わせる。",
+  "article": "foley-cues",
+  "controls": [
+   {
+    "key": "offset",
+    "label": "接触から音までのずれ",
+    "min": -300,
+    "max": 300,
+    "value": 0,
+    "unit": " ms",
+    "step": 25,
+    "type": "range"
+   },
+   {
+    "key": "material",
+    "label": "音の響き",
+    "options": [
+     "短い打音",
+     "低い響き"
+    ],
+    "value": 0,
+    "type": "select"
+   }
+  ],
+  "prompt": "0 msで再生したら、前後200 msでも再生してみてください。",
+  "explain": "接触する見た目は同じで、音の発生時刻と響きだけを変えます。タイミングをずらすと、音が接触と一緒に感じられるか比べられます。",
+  "limit": "音はラボで合成した作例です。端末の再生遅延があり、知覚を精密に測定する機器ではありません。",
+  "preset": {
+   "offset": 225,
+   "material": 1
+  },
+  "references": [],
+  "checked": "2026-11-25"
+ },
+ {
+  "id": "repair-identity",
+  "group": "歴史と文化",
+  "title": "全部の木を替えたら、同じ門？",
+  "short": "残したいものを選んで、修理の前後を比べる。",
+  "article": "joinery-memory",
+  "controls": [
+   {
+    "key": "changed",
+    "label": "交換した部材",
+    "min": 0,
+    "max": 8,
+    "value": 2,
+    "unit": "点",
+    "step": 1,
+    "type": "range"
+   },
+   {
+    "key": "design",
+    "label": "形",
+    "options": [
+     "元の形を保つ",
+     "形を変更する"
+    ],
+    "value": 0,
+    "type": "select"
+   },
+   {
+    "key": "records",
+    "label": "修理記録",
+    "options": [
+     "公開する",
+     "残っていない"
+    ],
+    "value": 0,
+    "type": "select"
+   }
+  ],
+  "prompt": "8点すべて替えた状態を残し、形だけ変えて、同じ門と思うか比べてください。",
+  "explain": "部材の量は数えられます。建物の形、利用の継続、工事の記録は別の手掛かりです。どの連続性を重視するかによって、同じ建物かという答えが変わります。",
+  "limit": "架空の門を使った思考実験です。部材の内訳は記号化しており、文化財の認定基準や工法は扱いません。",
+  "preset": {
+   "changed": 8
+  },
+  "references": [],
+  "checked": "2026-11-25"
+ },
+ {
+  "id": "sample-evidence",
+  "group": "科学と偶然",
+  "title": "小惑星の粒、ラベルが消えると？",
+  "short": "観測方法と出どころの組み合わせを変える。",
+  "article": "asteroid-samples",
+  "controls": [
+   {
+    "key": "mode",
+    "label": "観測方法",
+    "options": [
+     "遠隔観測",
+     "現地の探査機",
+     "地球で試料を分析"
+    ],
+    "value": 2,
+    "type": "select"
+   },
+   {
+    "key": "label",
+    "label": "試料の採取場所",
+    "options": [
+     "記録あり",
+     "記録なし"
+    ],
+    "value": 0,
+    "type": "select"
+   }
+  ],
+  "prompt": "分析方法を固定し、採取場所の記録だけ変えます。どの問いの結果が変わりますか。",
+  "explain": "現物の成分分析、天体の地図づくり、観測地点との照合は別の操作です。現物と地図の両方を得ても、どの場所と対応するかには採取記録が役立ちます。",
+  "limit": "観測の分担を見るための模型です。探査機や遠隔機器が測れる量は実際には装備・波長・試料で変わります。",
+  "preset": {
+   "label": 1
+  },
+  "references": [],
+  "checked": "2026-11-25"
+ },
+ {
+  "id": "archive-chain",
+  "group": "歴史と文化",
+  "title": "その声、検索で見つけられる？",
+  "short": "音源が残った後に、聴けるまでの条件を変える。",
+  "article": "archival-voice",
+  "controls": [
+   {
+    "key": "meta",
+    "label": "名前の目録",
+    "options": [
+     "あり",
+     "なし"
+    ],
+    "value": 0,
+    "type": "select"
+   },
+   {
+    "key": "access",
+    "label": "視聴条件",
+    "options": [
+     "公開",
+     "館内のみ"
+    ],
+    "value": 0,
+    "type": "select"
+   },
+   {
+    "key": "place",
+    "label": "調べる場所",
+    "options": [
+     "自宅",
+     "所蔵館"
+    ],
+    "value": 0,
+    "type": "select"
+   }
+  ],
+  "prompt": "音源は同じまま、公開範囲と目録を一つずつ変えてください。",
+  "explain": "音をファイルにするだけで、すべての人が名前で検索して再生できるとは限りません。検索用の目録と公開範囲はそれぞれ別の条件です。",
+  "limit": "架空の音源1点を名前で検索するモデルです。実際の図書館にはさまざまな利用条件や別の検索方法があります。",
+  "preset": {
+   "meta": 1,
+   "access": 1
+  },
+  "references": [],
+  "checked": "2026-11-25"
+ },
+ {
+  "id": "painted-highlight",
+  "group": "芸術とデザイン",
+  "title": "明るい二点で、丸く見える？",
+  "short": "輪郭と背景を動かし、反射の見え方を比べる。",
+  "article": "painted-pearl",
+  "controls": [
+   {
+    "key": "background",
+    "label": "背景の明るさ",
+    "min": 20,
+    "max": 160,
+    "value": 24,
+    "unit": "",
+    "step": 1,
+    "type": "range"
+   },
+   {
+    "key": "highlight",
+    "label": "上の反射の強さ",
+    "min": 0,
+    "max": 100,
+    "value": 90,
+    "unit": "%",
+    "step": 1,
+    "type": "range"
+   },
+   {
+    "key": "outline",
+    "label": "輪郭",
+    "options": [
+     "隠す",
+     "描く"
+    ],
+    "value": 0,
+    "type": "select"
+   }
+  ],
+  "prompt": "まず背景だけを動かし、次に反射を弱くします。いちばん丸く見える条件を残してみてください。",
+  "explain": "暗い背景と明るい反射は、材質や丸みを考える手掛かりになります。反射を残したまま輪郭や地の明るさを変えると、それぞれの手掛かりを比較できます。",
+  "limit": "ラボが描いた点と線の作例です。フェルメールの絵の模写や光沢の物理シミュレーションではありません。",
+  "preset": {
+   "background": 125,
+   "outline": 1
+  },
+  "references": [],
+  "checked": "2026-11-25"
+ },
+ {
   "id": "seats",
   "group": "社会と制度",
   "title": "その票は、何議席になる？",

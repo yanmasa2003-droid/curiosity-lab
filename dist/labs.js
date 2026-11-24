@@ -2,7 +2,7 @@
 let labGroup='すべて';
 const labMemory=new Map(),labPins=new Map();
 const LabMath={
- seats(votes,n){const seats=votes.map(()=>0),order=[];for(let k=0;k<n;k++){let win=0;for(let i=1;i<votes.length;i++)if(votes[i]*(seats[win]+1)>votes[win]*(seats[i]+1))win=i;const divisor=seats[win]+1;seats[win]++;order.push({party:win,divisor,quotient:votes[win]/divisor})}return {seats,order}},
+ seats(votes,n,divisorStep=1){const seats=votes.map(()=>0),order=[];for(let k=0;k<n;k++){let win=0;for(let i=1;i<votes.length;i++)if(votes[i]*(divisorStep*seats[win]+1)>votes[win]*(divisorStep*seats[i]+1))win=i;const divisor=divisorStep*seats[win]+1;seats[win]++;order.push({party:win,divisor,quotient:votes[win]/divisor})}return {seats,order}},
  allocation(weights){const sum=weights.reduce((a,b)=>a+b,0);return sum?weights.map(v=>100*v/sum):weights.map(()=>100/weights.length)},
  majority(groups,order){const ranks=[[0,1,2],[1,2,0],[2,0,1]],pairs=[[0,1],[1,2],[2,0]];const duel=(a,b)=>{let av=0,bv=0;ranks.forEach((r,i)=>{if(r.indexOf(a)<r.indexOf(b))av+=groups[i];else bv+=groups[i]});return {a,b,av,bv,winner:av===bv?null:av>bv?a:b}};const pair=pairs[order],first=duel(...pair),third=[0,1,2].find(i=>!pair.includes(i)),last=first.winner===null?null:duel(first.winner,third);return {pairs:pairs.map(p=>duel(...p)),first,last,winner:last?.winner??null}},
  average(last){const values=[2,3,4,5,last].sort((a,b)=>a-b);return {values,mean:values.reduce((a,b)=>a+b,0)/5,median:values[2]}},
@@ -93,6 +93,37 @@ function labModel(id,v){let body='',result='',richVisual='';
  }else if(id==='limiting'){
   const values=[v.a,v.b,v.c],level=Math.min(...values);body=`<rect x="165" y="${275-level*2}" width="270" height="${level*2}" fill="#7bbdc7" opacity=".7"/>`+values.map((h,i)=>`<rect x="${165+i*90}" y="${275-h*2}" width="82" height="${h*2}" rx="4" fill="#a68158" opacity=".55" stroke="#725735"/>${labText(206+i*90,305,'ABC'[i]+' '+h+'%',18,'currentColor','middle')}`).join('')+`<path d="M148 ${275-level*2}H454" stroke="#266677" stroke-width="3" stroke-dasharray="5 4"/>`;
   result=`樽にためられる上限は${level}%。今の一番低い板は${values.map((x,i)=>x===level?'ABC'[i]:'').filter(Boolean).join('・')}です。`;
+ }else if(id==='seat-formulas'){
+  const votes=[v.a,v.b,v.c];
+  const rows=[LabMath.seats(votes,v.n).seats,LabMath.seats(votes,v.n,2).seats];
+  body=rows.map((counts,i)=>labText(30,55+i*120,['ドント式','サンラグ式'][i],24)+counts.flatMap((n,k)=>Array(n).fill(k)).map((k,j)=>`<rect x="${30+j*27}" y="${75+i*120}" width="24" height="40" rx="4" fill="${labColors[k]}"/>${labText(42+j*27,102+i*120,'ABC'[k],16,'white','middle')}`).join('')).join('');
+  result=rows.map((row,i)=>['ドント式','サンラグ式'][i]+'：'+row.map((n,k)=>'ABC'[k]+' '+n+'席').join('、')).join('。');
+ }else if(id==='meal-window'){
+  const series=v.series?[100,100,100,100,100]:[70,130,100,100,100];
+  body=series.map((n,i)=>`<rect x="${45+i*104}" y="${250-n*1.5}" width="76" height="${n*1.5}" rx="6" fill="${labColors[i+1===v.day?1:0]}"/>${labText(83+i*104,240-n*1.5,n,22,'currentColor','middle')}${labText(83+i*104,278,(i+1)+'日目',17,'currentColor','middle')}`).join('');
+  result=`${v.day}日目の指数は${series[v.day-1]}。5日平均は100。最小は${Math.min(...series)}、最大は${Math.max(...series)}です。`;
+ }else if(id==='sound-sync'){
+  const position=300+v.offset*.75;
+  body=`<path d="M65 152H535" stroke="currentColor" opacity=".35" stroke-width="3"/><circle cx="300" cy="152" r="13" fill="${labColors[0]}"/><circle cx="${position}" cy="178" r="13" fill="${labColors[1]}"/>${labText(300,112,'箱が床に触れる',23,'currentColor','middle')}${labText(position,220,'音',22,'currentColor','middle')}`;
+  result=v.offset===0?'映像の接触と音を同時に設定しています。':`音は接触の${Math.abs(v.offset)} ms${v.offset<0?'前':'後'}です。`;
+ }else if(id==='repair-identity'){
+  const parts=[[140,148,38,110],[422,148,38,110],[132,125,336,28],[105,94,390,27],[110,66,185,24],[305,66,185,24],[201,160,24,78],[375,160,24,78]];
+  body=parts.map(([x,y,w,h],i)=>`<rect x="${x}" y="${y-(v.design&&i>=3&&i<=5?28:0)}" width="${w}" height="${h}" rx="4" fill="${i<v.changed?labColors[1]:labColors[0]}"/>`).join('')+labText(300,290,v.records?'修理記録なし':'修理記録あり',20,'currentColor','middle');
+  result=`元の部材 ${8-v.changed}点、交換 ${v.changed}点。形は${v.design?'変更':'維持'}、修理記録は${v.records?'なし':'あり'}。`;
+ }else if(id==='sample-evidence'){
+  const labels=['天体の広い範囲','地点の様子','試料の地上分析','粒と地点の照合'];
+  const flags=[[true,false,false,false],[true,true,false,false],[false,false,true,!v.label]][v.mode];
+  body=labels.map((label,i)=>labText(40,55+i*65,label,23)+labText(520,55+i*65,flags[i]?'○':'―',30,labColors[flags[i]?0:1],'middle')).join('');
+  result='この条件で調べられること：'+labels.filter((_,i)=>flags[i]).join('、')+'。';
+ }else if(id==='archive-chain'){
+  const marks=[true,!v.meta,!v.access||!!v.place];
+  const labels=['音源がある','名前で見つかる','視聴条件を満たす'];
+  body=labels.map((label,i)=>labText(40,70+i*80,label,23)+labText(520,70+i*80,marks[i]?'○':'×',30,labColors[marks[i]?0:1],'middle')).join('');
+  result=marks.every(Boolean)?'名前で検索して、今の場所で視聴できます。':(v.meta?'名前の目録がありません。':'名前で見つかります。')+(marks[2]?'利用場所の条件は満たしています。':'今の場所では視聴できません。');
+ }else if(id==='painted-highlight'){
+  const shade=`rgb(${v.background} ${v.background} ${v.background})`;
+  body=`<rect width="600" height="320" fill="${shade}"/><ellipse cx="300" cy="160" rx="74" ry="100" fill="none" stroke="#ddd" stroke-width="2" opacity="${v.outline}"/><ellipse cx="273" cy="108" rx="28" ry="13" fill="#fffbea" opacity="${v.highlight/100}" transform="rotate(-20 273 108)"/><ellipse cx="316" cy="220" rx="33" ry="13" fill="#8baab3" opacity=".65" transform="rotate(-12 316 220)"/>`;
+  result=`背景の明るさ ${v.background}、上の反射 ${v.highlight}%、輪郭${v.outline?'あり':'なし'}。`;
  }else throw Error('Unknown lab model '+id);
  return {visual:richVisual||labSVG(body,result),result};
 }
@@ -102,9 +133,9 @@ function lab(){
  const id=location.hash.startsWith('#lab-')?location.hash.slice(5):null,e=labRecord(id);
  if(e)return labDetail(e);
  const list=LAB_EXPERIMENTS.filter(e=>labGroup==='すべて'||e.group===labGroup);
- return `<div class="page lab-page"><section class="lab-cover"><div><div class="eyebrow">THE PLAYFUL MUSEUM</div><h1>「もしも」を、<br>動かしてみよう。</h1><p>言葉も、歴史も、暮らしも。<br>条件を変えると、世界の見え方が変わる。</p><div class="lab-cover-facts"><span>24の体験</span><span>8つのジャンル</span><span>正解も、宿題もなし</span></div><button class="primary" data-lab-random>今日は、偶然の扉から</button></div><div class="lab-cover-art" aria-hidden="true"><div class="lab-art-orbit"></div><span>IF</span><i class="lab-art-piece p-one"></i><i class="lab-art-piece p-two"></i><i class="lab-art-piece p-three"></i></div></section><div class="lab-guide"><p><b>変える。</b>ひとつの条件を動かす。</p><p><b>比べる。</b>この起動中の状態を残す。</p><p><b>気づく。</b>解説と行き来する。</p></div><section class="lab-directory"><div class="section-heading"><div><div class="eyebrow">PICK A LITTLE WHAT IF</div><h2>今日は、何を試そう。</h2></div><span id="lab-count">${list.length}の体験</span></div><div class="lab-filters" role="group" aria-label="実験のジャンル">${['すべて',...LAB_GROUPS.map(g=>g.name)].map(g=>`<button data-lab-filter="${g}" aria-pressed="${g===labGroup}">${g}</button>`).join('')}</div><div class="lab-gallery">${list.map(labTile).join('')}</div></section></div>`;
+ return `<div class="page lab-page"><section class="lab-cover"><div><div class="eyebrow">THE PLAYFUL MUSEUM</div><h1>「もしも」を、<br>動かしてみよう。</h1><p>言葉も、歴史も、暮らしも。<br>条件を変えると、世界の見え方が変わる。</p><div class="lab-cover-facts"><span>${LAB_EXPERIMENTS.length}の体験</span><span>${LAB_GROUPS.length}つのジャンル</span><span>正解も、宿題もなし</span></div><button class="primary" data-lab-random>今日は、偶然の扉から</button></div><div class="lab-cover-art" aria-hidden="true"><div class="lab-art-orbit"></div><span>IF</span><i class="lab-art-piece p-one"></i><i class="lab-art-piece p-two"></i><i class="lab-art-piece p-three"></i></div></section><div class="lab-guide"><p><b>変える。</b>ひとつの条件を動かす。</p><p><b>比べる。</b>この起動中の状態を残す。</p><p><b>気づく。</b>解説と行き来する。</p></div><section class="lab-directory"><div class="section-heading"><div><div class="eyebrow">PICK A LITTLE WHAT IF</div><h2>今日は、何を試そう。</h2></div><span id="lab-count">${list.length}の体験</span></div><div class="lab-filters" role="group" aria-label="実験のジャンル">${['すべて',...LAB_GROUPS.map(g=>g.name)].map(g=>`<button data-lab-filter="${g}" aria-pressed="${g===labGroup}">${g}</button>`).join('')}</div><div class="lab-gallery">${list.map(labTile).join('')}</div></section></div>`;
 }
-function labDetail(e){const g=labPalette(e),legacy=['pendulum','illusion','chance'].includes(e.id);return `<div class="page lab-detail" style="--lab-ink:${g.ink};--lab-bg:${g.bg}"><a class="lab-back" href="#lab">実験室の入口へ</a><div class="lab-detail-heading"><span class="eyebrow">${g.en} / ${esc(e.group)}</span><h1>${esc(e.title)}</h1><p>${esc(e.short)}</p></div><section class="lab-workshop" aria-label="${esc(e.title)}の操作体験">${legacy?'<div id="experiment" class="experiment"></div>':`<div class="lab-stage"><div id="lab-visual"></div><p id="lab-result" class="lab-result" role="status" aria-live="polite"></p></div><div class="lab-console"><h2>もし、こう変えたら？</h2><div id="lab-controls"></div><div class="lab-control-buttons"><button class="primary" id="lab-preset">試すヒントの条件にする</button><button class="secondary" id="lab-pin">いまの条件を残す</button><button class="secondary" id="lab-reset">最初の条件に戻す</button></div><p class="lab-hint">${esc(e.prompt)}</p></div>`}</section><div id="lab-comparison"></div><section class="lab-explanation"><div><div class="eyebrow">WHAT CHANGED?</div><h2>何が変わった？<br>なぜ、そうなる？</h2></div><div><p>${esc(e.explain)}</p><details><summary>この体験で扱う条件</summary><p>${esc(e.limit)}</p></details><button class="text-link" id="lab-bridge">いまの発見をGPTへコピー</button></div></section>${labMedia(e)}<section class="lab-next"><div class="section-heading"><div><div class="eyebrow">ONE MORE LITTLE DETOUR</div><h2>次は、違う角度から。</h2></div><a href="#lab">24の体験へ戻る</a></div><div class="lab-gallery">${LAB_EXPERIMENTS.filter(x=>x.id!==e.id&&x.group===e.group).concat(LAB_EXPERIMENTS.filter(x=>x.group!==e.group).slice(0,1)).slice(0,3).map(labTile).join('')}</div></section></div>`}
+function labDetail(e){const g=labPalette(e),legacy=['pendulum','illusion','chance'].includes(e.id);return `<div class="page lab-detail" style="--lab-ink:${g.ink};--lab-bg:${g.bg}"><a class="lab-back" href="#lab">実験室の入口へ</a><div class="lab-detail-heading"><span class="eyebrow">${g.en} / ${esc(e.group)}</span><h1>${esc(e.title)}</h1><p>${esc(e.short)}</p></div><section class="lab-workshop" aria-label="${esc(e.title)}の操作体験">${legacy?'<div id="experiment" class="experiment"></div>':`<div class="lab-stage"><div id="lab-visual"></div>${e.id==='sound-sync'?'<div class="lab-control-buttons"><button type="button" class="secondary" id="lab-sound">映像と音を再生</button></div>':''}<p id="lab-result" class="lab-result" role="status" aria-live="polite"></p></div><div class="lab-console"><h2>もし、こう変えたら？</h2><div id="lab-controls"></div><div class="lab-control-buttons"><button class="primary" id="lab-preset">試すヒントの条件にする</button><button class="secondary" id="lab-pin">いまの条件を残す</button><button class="secondary" id="lab-reset">最初の条件に戻す</button></div><p class="lab-hint">${esc(e.prompt)}</p></div>`}</section><div id="lab-comparison"></div><section class="lab-explanation"><div><div class="eyebrow">WHAT CHANGED?</div><h2>何が変わった？<br>なぜ、そうなる？</h2></div><div><p>${esc(e.explain)}</p><details><summary>この体験で扱う条件</summary><p>${esc(e.limit)}</p></details><button class="text-link" id="lab-bridge">いまの発見をGPTへコピー</button></div></section>${labMedia(e)}<section class="lab-next"><div class="section-heading"><div><div class="eyebrow">ONE MORE LITTLE DETOUR</div><h2>次は、違う角度から。</h2></div><a href="#lab">${LAB_EXPERIMENTS.length}の体験へ戻る</a></div><div class="lab-gallery">${LAB_EXPERIMENTS.filter(x=>x.id!==e.id&&x.group===e.group).concat(LAB_EXPERIMENTS.filter(x=>x.group!==e.group).slice(0,1)).slice(0,3).map(labTile).join('')}</div></section></div>`}
 function labVideo(e,a){const specific=e.id==='composition'?{title:'写真家 ハービー・山口氏が語る「よりそいの構図」',provider:'キヤノン公式',url:'https://www.youtube.com/watch?v=Q71ib8jioJU',id:'Q71ib8jioJU',key:'lab-composition',language:'ja',relation:'related',checked:'2026-11-25',verification:'publisher-page',note:'写真家が構図の考え方を語る日本語映像。三分割の操作手順だけを解説する動画ではありません。'}:null;
  const civic=['seats','majority'].includes(e.id)?{title:'民主主義と選挙の原則',provider:'eboard',url:'https://www.youtube.com/watch?v=CsBVfKYOqw8',id:'CsBVfKYOqw8',language:'ja',relation:'related',checked:'2026-11-25',verification:'publisher-page',note:'日本語の社会科映像。選挙と民主主義の背景を学ぶ補足で、ドント式や多数決循環だけを扱う動画ではありません。'}:null;
  const original=specific||civic||a.videos[0],v={...original,relation:'related',articleId:a.id,image:a.image,note:(specific||civic)?.note||`「${a.title}」の関連映像です。この模型そのものの操作説明ではありません。${original.note}`};
@@ -115,6 +146,33 @@ function labMedia(e){const a=data.find(a=>a.id===e.article);if(!a)return '';cons
  return `<section class="lab-media"><div class="section-heading"><div><div class="eyebrow">WATCH, READ, GO FURTHER</div><h2>見て、読んで、もう少し。</h2><p>日本語で確認できる参考映像と資料。映像の対象範囲は各説明に記載しています。</p></div></div><div class="lab-media-columns"><div>${videoCard(v)}</div><div class="lab-reading"><h3>日本語の参考資料</h3>${refs.map(r=>`<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.name)}</a>`).join('')}<button class="secondary" data-article="${e.article}">関連する展示を読む</button><p class="fine">モデル・作例：Curiosity Lab。資料の文章を再現したものではありません。参考映像の全編採点は未実施。公開元の案内確認：${e.checked}。</p></div></div></section>`;
 }
 function labControlHTML(e,v){return e.controls.map(c=>`<label class="lab-control" for="lab-${c.key}"><span>${esc(c.label)}${c.type==='range'?`<output id="lab-out-${c.key}" for="lab-${c.key}">${v[c.key]}${esc(c.unit)}</output>`:''}</span>${c.type==='select'?`<select id="lab-${c.key}" data-lab-value="${c.key}">${c.options.map((x,i)=>`<option value="${i}" ${v[c.key]===i?'selected':''}>${esc(x)}</option>`).join('')}</select>`:`<input type="range" id="lab-${c.key}" data-lab-value="${c.key}" min="${c.min}" max="${c.max}" step="${c.step}" value="${v[c.key]}">`}</label>`).join('')}
+let labAudio;
+async function playLabSound(values,button){
+ const Audio=window.AudioContext||window.webkitAudioContext;
+ if(!Audio){toast('このブラウザーでは音を再生できません。');return}
+ const {offset,material}=values;
+ button.disabled=true;
+ try{
+  labAudio??=new Audio();
+  await labAudio.resume();
+  if(!button.isConnected)return;
+  const start=labAudio.currentTime+.08,impact=start+.5,when=impact+offset/1000;
+  const tone=labAudio.createOscillator(),volume=labAudio.createGain();
+  tone.type=material?'sine':'triangle';
+  tone.frequency.setValueAtTime(material?105:390,when);
+  tone.frequency.exponentialRampToValueAtTime(material?48:120,when+.06);
+  volume.gain.setValueAtTime(.24,when);
+  volume.gain.exponentialRampToValueAtTime(.001,when+(material?.25:.09));
+  tone.connect(volume).connect(labAudio.destination);
+  tone.start(when);
+  tone.stop(when+.28);
+  tone.onended=()=>{tone.disconnect();volume.disconnect()};
+  const visual=$('#lab-visual');
+  visual.innerHTML=labSVG('<path d="M80 242H520" stroke="currentColor" stroke-width="3"/><rect x="267" y="172" width="66" height="66" rx="6" fill="#508c6b"/>','箱が床へ落ちる図');
+  visual.querySelector('rect').animate([{transform:'translateY(-150px)'},{transform:'translateY(0)'}],{duration:500,delay:80,easing:'ease-in',fill:'both'});
+  setTimeout(()=>{button.disabled=false},950);
+ }catch{button.disabled=false;toast('音を再生できませんでした。')}
+}
 function setupExperiment(){
  const id=location.hash.startsWith('#lab-')?location.hash.slice(5):null,e=labRecord(id);if(!e)return;
  if(['pendulum','illusion','chance'].includes(e.id)){expType=e.id;setupLegacyExperiment();if(e.id==='illusion')$('#experiment .source-list')?.remove();}
@@ -122,7 +180,10 @@ function setupExperiment(){
   let values=labNormalize(e,labMemory.get(e.id)||labDefaults(e));
   function paint(){const m=labModel(e.id,values);$('#lab-visual').innerHTML=m.visual;$('#lab-result').textContent=m.result;labMemory.set(e.id,{...values});e.controls.forEach(c=>{const output=$('#lab-out-'+c.key);if(output)output.textContent=Number(values[c.key].toFixed(2))+(c.unit||'')});const pin=labPins.get(e.id);$('#lab-comparison').innerHTML=pin?`<section class="lab-previous"><div class="lab-previous-head"><h2>さっき残した条件と、比べよう。</h2><button class="secondary" id="lab-unpin">比較を閉じる</button></div><p class="fine">この起動中の比較用です。アプリを読み込み直すと消えます。</p><p>${esc(pin.conditions)}</p>${pin.visual}<p>${esc(pin.result)}</p></section>`:'';if(pin)$('#lab-unpin').onclick=()=>{labPins.delete(e.id);paint()};}
   function controls(){ $('#lab-controls').innerHTML=labControlHTML(e,values);$$('[data-lab-value]').forEach(input=>{const update=()=>{values=labNormalize(e,{...values,[input.dataset.labValue]:input.value});paint()};input.addEventListener(input.tagName==='SELECT'?'change':'input',update)}); }
-  controls();paint();$('#lab-preset').onclick=()=>{values=labNormalize(e,{...values,...e.preset});controls();paint()};$('#lab-reset').onclick=()=>{values=labDefaults(e);labPins.delete(e.id);controls();paint()};$('#lab-pin').onclick=()=>{const m=labModel(e.id,values);labPins.set(e.id,{...m,conditions:e.controls.map(c=>c.label+'：'+(c.type==='select'?c.options[values[c.key]]:Number(values[c.key].toFixed(2))+(c.unit||''))).join(' / ')});paint();toast('この条件を残しました。次に条件を変えて比べてみましょう。')};
+  controls();paint();
+  const soundButton=$('#lab-sound');
+  if(soundButton)soundButton.onclick=()=>playLabSound(values,soundButton);
+$('#lab-preset').onclick=()=>{values=labNormalize(e,{...values,...e.preset});controls();paint()};$('#lab-reset').onclick=()=>{values=labDefaults(e);labPins.delete(e.id);controls();paint()};$('#lab-pin').onclick=()=>{const m=labModel(e.id,values);labPins.set(e.id,{...m,conditions:e.controls.map(c=>c.label+'：'+(c.type==='select'?c.options[values[c.key]]:Number(values[c.key].toFixed(2))+(c.unit||''))).join(' / ')});paint();toast('この条件を残しました。次に条件を変えて比べてみましょう。')};
  }
  $('#lab-bridge').onclick=()=>{const values=labMemory.get(e.id)||{},conditions=e.controls.map(c=>c.label+'：'+(c.type==='select'?c.options[values[c.key]??c.value]:(values[c.key]??c.value)+(c.unit||''))).join('\n'),a=data.find(a=>a.id===e.article);copy(`【Curiosity Lab 実験室】\nテーマ：${e.title}\n操作した条件：\n${conditions||'実験画面の条件について'}\n観察：${$('#lab-result')?.textContent||e.short}\n仕組み：${e.explain}\n模型の条件：${e.limit}\n日本語の参考資料：\n${(e.references.length?e.references:a?.sources||[]).map(s=>s.name+' '+s.url).join('\n')}\n日本語の参考映像：\n${a?labVideo(e,a).title+' '+labVideo(e,a).url:''}\n依頼：この条件から何が言えて、何は言えないかを整理し、別の条件を試すならどこを変えると面白いか提案してください。実験の模型・根拠のある事実・推測を区別してください。`)};
 }

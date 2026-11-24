@@ -22,13 +22,19 @@ jobs:
         with:
           node-version: '22'
       - run: npm test
-      - run: node scripts/update.mjs
+      - run: node scripts/update.mjs --live
         id: refresh
         continue-on-error: true
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_MODEL: ${{ vars.OPENAI_MODEL }}
       - run: npm run check
+      - name: Keep episode candidates for editorial review
+        uses: actions/upload-artifact@v4
+        with:
+          name: video-candidates
+          path: video-candidates.json
+          if-no-files-found: ignore
       - name: Save validated content
         run: |
           git config user.name 'Curiosity Lab curator'
