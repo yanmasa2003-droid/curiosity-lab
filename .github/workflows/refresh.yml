@@ -23,6 +23,8 @@ jobs:
           node-version: '22'
       - run: npm test
       - run: node scripts/update.mjs
+        id: refresh
+        continue-on-error: true
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_MODEL: ${{ vars.OPENAI_MODEL }}
@@ -31,7 +33,7 @@ jobs:
         run: |
           git config user.name 'Curiosity Lab curator'
           git config user.email 'curator@users.noreply.github.com'
-          git add dist/content.json
+          git add dist/content.json dist/update-status.json
           if ! git diff --cached --quiet; then
             git commit -m 'Add a source-checked discovery'
             git push
@@ -42,3 +44,8 @@ jobs:
           path: dist
       - id: deployment
         uses: actions/deploy-pages@v4
+      - name: Report stalled publication
+        if: steps.refresh.outcome == 'failure'
+        run: |
+          echo '::error::Article publication stalled. Existing content and the current update status were deployed.'
+          exit 1

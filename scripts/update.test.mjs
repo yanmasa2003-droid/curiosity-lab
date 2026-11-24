@@ -17,9 +17,33 @@ test('failed updates leave published content unchanged',()=>{
 const root=fs.mkdtempSync(path.join(os.tmpdir(),'curiosity-test-'));
 try{for(const dir of ['dist','scripts'])fs.cpSync(dir,path.join(root,dir),{recursive:true});fs.writeFileSync(path.join(root,'package.json'),'{"type":"module"}');const before=fs.readFileSync(path.join(root,'dist/content.json'),'utf8');fs.writeFileSync(path.join(root,'scripts/approved-queue.json'),JSON.stringify([{...content.articles[0],id:'broken-new-item',title:'broken-new',image:'absent'}]));const run=spawnSync(process.execPath,['scripts/update.mjs'],{cwd:root,encoding:'utf8',env:{...process.env,OPENAI_API_KEY:''}});assert.equal(run.status,1);assert.equal(fs.readFileSync(path.join(root,'dist/content.json'),'utf8'),before)}finally{fs.rmSync(root,{recursive:true,force:true})}
 });
-test('legacy queue is held and existing content remains intact',()=>{const root=fs.mkdtempSync(path.join(os.tmpdir(),'curiosity-publish-'));try{for(const dir of ['dist','scripts'])fs.cpSync(dir,path.join(root,dir),{recursive:true});fs.writeFileSync(path.join(root,'package.json'),'{"type":"module"}');const run=spawnSync(process.execPath,['scripts/update.mjs'],{cwd:root,encoding:'utf8',env:{...process.env,OPENAI_API_KEY:''}});assert.equal(run.status,0,run.stderr);const after=JSON.parse(fs.readFileSync(path.join(root,'dist/content.json')));assert.equal(after.articles.length,content.articles.length);assert.equal(new Set(after.articles.map(a=>a.id)).size,after.articles.length)}finally{fs.rmSync(root,{recursive:true,force:true})}});
+test('empty or held queue fails visibly while preserving existing content',()=>{const root=fs.mkdtempSync(path.join(os.tmpdir(),'curiosity-publish-'));try{for(const dir of ['dist','scripts'])fs.cpSync(dir,path.join(root,dir),{recursive:true});fs.writeFileSync(path.join(root,'package.json'),'{"type":"module"}');fs.writeFileSync(path.join(root,'scripts/approved-queue.json'),JSON.stringify([{...content.articles[0],id:'held-legacy',videos:[]}]));const run=spawnSync(process.execPath,['scripts/update.mjs'],{cwd:root,encoding:'utf8',env:{...process.env,OPENAI_API_KEY:''}});assert.equal(run.status,1,run.stderr);const status=JSON.parse(fs.readFileSync(path.join(root,'dist/update-status.json')));assert.equal(status.status,'awaiting-review');assert.equal(status.held,1);assert.equal(status.remaining,0);const after=JSON.parse(fs.readFileSync(path.join(root,'dist/content.json')));assert.equal(after.articles.length,content.articles.length);assert.equal(new Set(after.articles.map(a=>a.id)).size,after.articles.length)}finally{fs.rmSync(root,{recursive:true,force:true})}});
 
 test('Japanese video and Japanese references are mandatory for every exhibit',()=>{for(const field of ['videos','sources']){const bad=structuredClone(content);if(field==='videos')bad.articles[0].videos=[];else bad.articles[0].sources[0].language='en';assert.throws(()=>validate(bad),/Japanese/)}const bad=structuredClone(content);bad.articles[0].videos[0].language='en';assert.throws(()=>validate(bad),/Japanese/)});
 test('thin article is rejected even if the time label says five minutes',()=>{const bad=structuredClone(content);bad.articles[0].minutes=5;bad.articles[0].sections=Array.from({length:5},()=>({heading:'背景',text:'短い要約'}));assert.throws(()=>validate(bad),/insufficient article depth/)});
 test('unreviewed generation cannot invent media or language evidence',async()=>{await assert.rejects(()=>generate({url:'https://example.com'},[],()=>{throw Error('must not fetch')}),/curated Japanese video/)});
 test('new reviewed candidate still publishes atomically',()=>{const root=fs.mkdtempSync(path.join(os.tmpdir(),'curiosity-reviewed-'));try{for(const dir of ['dist','scripts'])fs.cpSync(dir,path.join(root,dir),{recursive:true});fs.writeFileSync(path.join(root,'package.json'),'\{"type":"module"\}');fs.writeFileSync(path.join(root,'scripts/approved-queue.json'),JSON.stringify([{...content.articles[0],id:'reviewed-example',title:'確認済みの記事を公開する動作検証'}]));const run=spawnSync(process.execPath,['scripts/update.mjs'],{cwd:root,encoding:'utf8',env:{...process.env,OPENAI_API_KEY:''}});assert.equal(run.status,0,run.stderr);const after=JSON.parse(fs.readFileSync(path.join(root,'dist/content.json')));assert.equal(after.articles.length,content.articles.length+1);assert.equal(after.articles.at(-1).id,'reviewed-example')}finally{fs.rmSync(root,{recursive:true,force:true})}});
+
+test('every actual pending exhibit publishes once without API keys, then exhaustion is reported',()=>{
+ const root=fs.mkdtempSync(path.join(os.tmpdir(),'curiosity-real-queue-'));
+ try{
+  for(const dir of ['dist','scripts'])fs.cpSync(dir,path.join(root,dir),{recursive:true});
+  fs.writeFileSync(path.join(root,'package.json'),'{"type":"module"}');
+  const queue=JSON.parse(fs.readFileSync('scripts/approved-queue.json'));
+  const pending=queue.filter(a=>!content.articles.some(b=>a.id===b.id));
+  for(const a of pending)assert.ok(a.sections.reduce((n,s)=>n+s.text.length,0)>=1200,a.id);
+  for(let i=0;i<pending.length;i++){
+   const run=spawnSync(process.execPath,['scripts/update.mjs'],{cwd:root,encoding:'utf8',env:{...process.env,OPENAI_API_KEY:''}});
+   assert.equal(run.status,0,run.stderr);
+   const after=JSON.parse(fs.readFileSync(path.join(root,'dist/content.json')));
+   validate(after,path.join(root,'dist'));
+   assert.equal(after.articles.length,content.articles.length+i+1);
+   const status=JSON.parse(fs.readFileSync(path.join(root,'dist/update-status.json')));
+   assert.equal(status.remaining,pending.length-i-1);assert.equal(status.contentVersion,after.version);
+  }
+  const before=fs.readFileSync(path.join(root,'dist/content.json'),'utf8');
+  const exhausted=spawnSync(process.execPath,['scripts/update.mjs'],{cwd:root,encoding:'utf8',env:{...process.env,OPENAI_API_KEY:''}});
+  assert.equal(exhausted.status,1);assert.equal(fs.readFileSync(path.join(root,'dist/content.json'),'utf8'),before);
+  assert.equal(JSON.parse(fs.readFileSync(path.join(root,'dist/update-status.json'))).status,'awaiting-review');
+ }finally{fs.rmSync(root,{recursive:true,force:true})}
+});
