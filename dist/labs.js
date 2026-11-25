@@ -22,8 +22,63 @@ function labText(x,y,text,size=20,color='currentColor',anchor='start'){return `<
 const labColors=['#378e83','#bd685d','#7971a8'];
 function labBar(y,label,value,color=labColors[0],suffix='%'){return `${labText(28,y+7,label,17)}<rect x="150" y="${y-14}" width="360" height="28" rx="4" fill="currentColor" opacity=".08"/><rect x="150" y="${y-14}" width="${3.6*value}" height="28" rx="4" fill="${color}"/>${labText(535,y+7,value.toFixed(1)+suffix,17)}`}
 function labDots(percent,color='#508c6b'){return Array.from({length:100},(_,i)=>`<circle cx="${78+i%10*49}" cy="${30+Math.floor(i/10)*27}" r="8" fill="${i<Math.round(percent)?color:'#c7c7c0'}"/>`).join('')}
+const labPivotPoints = [[100,139],[175,115],[300,172],[425,115],[500,139],[221,102],[379,102],[300,91],[300,51],[245,218],[355,218],[216,274],[384,274]];
+const labPivotLinks = [[0,1],[1,5],[4,3],[3,6],[5,6],[5,7],[6,7],[7,8],[5,2],[6,2],[2,9],[2,10],[9,11],[10,12]];
+
+function labPivotPose(points, links, fixed, input, force) {
+ const pose = points.map(point => [...point]);
+ if (!fixed.has(input)) pose[input][1] += force * .72;
+ const lengths = links.map(([a,b]) => Math.hypot(points[b][0]-points[a][0], points[b][1]-points[a][1]));
+ // Project each link back to its original length, keeping fixed endpoints still.
+ for (let pass=0; pass<100; pass++) {
+  links.forEach(([a,b], i) => {
+   const moveA = fixed.has(a) ? 0 : 1, moveB = fixed.has(b) ? 0 : 1;
+   if (!moveA && !moveB) return;
+   const dx=pose[b][0]-pose[a][0], dy=pose[b][1]-pose[a][1], length=Math.hypot(dx,dy);
+   if (!length) return;
+   const correction = (length-lengths[i])/length/(moveA+moveB);
+   pose[a][0] += dx*correction*moveA;
+   pose[a][1] += dy*correction*moveA;
+   pose[b][0] -= dx*correction*moveB;
+   pose[b][1] -= dy*correction*moveB;
+  });
+ }
+ return pose;
+}
+
+function labPivotModel(v) {
+ const fixed = new Set([1,2,3,4,5].flatMap((n,i)=>v['pin'+n]?[i]:[]));
+ const input = [0,2,4][v.load];
+ const human = v.mode===1;
+ const points = human ? labPivotPoints : Array.from({length:5}, (_,i)=>[104+i*98,143]);
+ let pose, result;
+ if (human) {
+  pose = fixed.size ? labPivotPose(points,labPivotLinks,fixed,input,v.force) : points.map(([x,y])=>[x,y+v.force*.35]);
+  result = fixed.has(input) ? '力を加えた場所が固定されているため、その点は動きません。' : fixed.size ? '青いピンはその場に残ります。薄い元の姿勢と比べて、どの関節が動いたか見てみましょう。' : '支点がないので、人形全体が下に移動します。';
+ } else {
+  const [pivot] = fixed;
+  const origin = points[pivot] || points[2];
+  const lever = points[input][0]-origin[0];
+  const angle = fixed.size===1 ? lever/392*v.force*.006 : 0;
+  pose = points.map(([x,y])=>[origin[0]+(x-origin[0])*Math.cos(angle),y+(x-origin[0])*Math.sin(angle)+(fixed.size?0:v.force*.6)]);
+  result = fixed.size>1 ? '離れた２点以上が固定され、硬い板は傾きません。' : fixed.has(input) ? '支点そのものを押すので、板は傾きません。' : fixed.size ? `支点から力を加える位置まで、板全体の長さの ${Math.abs(lever)/392*100}% 離れています。押された側が下がります。` : '支点がないので、板全体が下に移動します。';
+ }
+ if (!v.force) result = '力はまだ加えていません。ピンの位置を決めてから力を上げてみましょう。';
+ const line = (a,b)=>`M${a[0]} ${a[1]}L${b[0]} ${b[1]}`;
+ const drawing = (p,ink,opacity) => human
+  ? `<path d="${labPivotLinks.map(([a,b])=>line(p[a],p[b])).join(' ')}" fill="none" stroke="${ink}" stroke-width="11" stroke-linecap="round" opacity="${opacity}"/><circle cx="${p[8][0]}" cy="${p[8][1]}" r="18" fill="${ink}" opacity="${opacity}"/>`
+  : `<path d="${line(p[0],p[4])}" fill="none" stroke="${ink}" stroke-width="12" stroke-linecap="round" opacity="${opacity}"/>`;
+ const markers = pose.slice(0,5).map(([x,y],i)=>`<circle cx="${x}" cy="${y}" r="13" fill="${fixed.has(i)?'#176a91':'#f6fbfc'}" stroke="#176a91" stroke-width="2"/>${labText(x,y+5,i+1,14,fixed.has(i)?'white':'#174f58','middle')}`).join('');
+ const [x,y] = pose[input];
+ const arrow = v.force ? `<path d="M${x} ${y-23-v.force*.35}V${y-17}m-5-6 5 6 5-6" fill="none" stroke="#b35b28" stroke-width="4" stroke-linecap="round"/>` : '';
+ const body = `<rect width="600" height="320" rx="14" fill="#edf6f7"/><path d="M30 304H570" stroke="#bed6df" stroke-dasharray="4 7"/>`+drawing(points,'#416b78',.2)+drawing(pose,'#314f62',1)+markers+arrow;
+ return {body,result:`固定した支点 ${fixed.size}/5。 ${result}`};
+}
+
 function labModel(id,v){let body='',result='',richVisual='';
- if(id==='seats'){
+ if(id==='pivot-playground'){
+  ({body,result}=labPivotModel(v));
+ }else if(id==='seats'){
   const votes=[v.a,v.b,v.c],n=v.n,{seats,order}=LabMath.seats(votes,n),total=v.a+v.b+v.c;
   body=seats.map((count,i)=>labBar(48+i*63,`${'ABC'[i]} ${count}席`,count/n*100,labColors[i])).join('');
   body+=order.map((s,i)=>`<circle cx="${45+i%10*53}" cy="${255+Math.floor(i/10)*32}" r="13" fill="${labColors[s.party]}"/>${labText(45+i%10*53,260+Math.floor(i/10)*32,'ABC'[s.party],13,'white','middle')}`).join('');
@@ -136,14 +191,14 @@ function lab(){
  return `<div class="page lab-page"><section class="lab-cover"><div><div class="eyebrow">THE PLAYFUL MUSEUM</div><h1>「もしも」を、<br>動かしてみよう。</h1><p>言葉も、歴史も、暮らしも。<br>条件を変えると、世界の見え方が変わる。</p><div class="lab-cover-facts"><span>${LAB_EXPERIMENTS.length}の体験</span><span>${LAB_GROUPS.length}つのジャンル</span><span>正解も、宿題もなし</span></div><button class="primary" data-lab-random>今日は、偶然の扉から</button></div><div class="lab-cover-art" aria-hidden="true"><div class="lab-art-orbit"></div><span>IF</span><i class="lab-art-piece p-one"></i><i class="lab-art-piece p-two"></i><i class="lab-art-piece p-three"></i></div></section><div class="lab-guide"><p><b>変える。</b>ひとつの条件を動かす。</p><p><b>比べる。</b>この起動中の状態を残す。</p><p><b>気づく。</b>解説と行き来する。</p></div><section class="lab-directory"><div class="section-heading"><div><div class="eyebrow">PICK A LITTLE WHAT IF</div><h2>今日は、何を試そう。</h2></div><span id="lab-count">${list.length}の体験</span></div><div class="lab-filters" role="group" aria-label="実験のジャンル">${['すべて',...LAB_GROUPS.map(g=>g.name)].map(g=>`<button data-lab-filter="${g}" aria-pressed="${g===labGroup}">${g}</button>`).join('')}</div><div class="lab-gallery">${list.map(labTile).join('')}</div></section></div>`;
 }
 function labDetail(e){const g=labPalette(e),legacy=['pendulum','illusion','chance'].includes(e.id);return `<div class="page lab-detail" style="--lab-ink:${g.ink};--lab-bg:${g.bg}"><a class="lab-back" href="#lab">実験室の入口へ</a><div class="lab-detail-heading"><span class="eyebrow">${g.en} / ${esc(e.group)}</span><h1>${esc(e.title)}</h1><p>${esc(e.short)}</p></div><section class="lab-workshop" aria-label="${esc(e.title)}の操作体験">${legacy?'<div id="experiment" class="experiment"></div>':`<div class="lab-stage"><div id="lab-visual"></div>${e.id==='sound-sync'?'<div class="lab-control-buttons"><button type="button" class="secondary" id="lab-sound">映像と音を再生</button></div>':''}<p id="lab-result" class="lab-result" role="status" aria-live="polite"></p></div><div class="lab-console"><h2>もし、こう変えたら？</h2><div id="lab-controls"></div><div class="lab-control-buttons"><button class="primary" id="lab-preset">試すヒントの条件にする</button><button class="secondary" id="lab-pin">いまの条件を残す</button><button class="secondary" id="lab-reset">最初の条件に戻す</button></div><p class="lab-hint">${esc(e.prompt)}</p></div>`}</section><div id="lab-comparison"></div><section class="lab-explanation"><div><div class="eyebrow">WHAT CHANGED?</div><h2>何が変わった？<br>なぜ、そうなる？</h2></div><div><p>${esc(e.explain)}</p><details><summary>この体験で扱う条件</summary><p>${esc(e.limit)}</p></details><button class="text-link" id="lab-bridge">いまの発見をGPTへコピー</button></div></section>${labMedia(e)}<section class="lab-next"><div class="section-heading"><div><div class="eyebrow">ONE MORE LITTLE DETOUR</div><h2>次は、違う角度から。</h2></div><a href="#lab">${LAB_EXPERIMENTS.length}の体験へ戻る</a></div><div class="lab-gallery">${LAB_EXPERIMENTS.filter(x=>x.id!==e.id&&x.group===e.group).concat(LAB_EXPERIMENTS.filter(x=>x.group!==e.group).slice(0,1)).slice(0,3).map(labTile).join('')}</div></section></div>`}
-function labVideo(e,a){const specific=e.id==='composition'?{title:'写真家 ハービー・山口氏が語る「よりそいの構図」',provider:'キヤノン公式',url:'https://www.youtube.com/watch?v=Q71ib8jioJU',id:'Q71ib8jioJU',key:'lab-composition',language:'ja',relation:'related',checked:'2026-11-25',verification:'publisher-page',note:'写真家が構図の考え方を語る日本語映像。三分割の操作手順だけを解説する動画ではありません。'}:null;
+function labVideo(e,a){const specific=e.id==='pivot-playground'?{title:'力点、作用点の位置と必要な力',provider:'NPO法人eboard',url:'https://www.youtube.com/watch?v=f4ZHnp04iBQ',id:'f4ZHnp04iBQ',key:'lab-pivot-playground',language:'ja',relation:'related',checked:'2026-11-25',verification:'publisher-page',note:'実験用のてこで、力点・作用点の位置を変えて比べる日本語動画です。映像は支点が一つの通常のてこを扱います。'}:e.id==='composition'?{title:'写真家 ハービー・山口氏が語る「よりそいの構図」',provider:'キヤノン公式',url:'https://www.youtube.com/watch?v=Q71ib8jioJU',id:'Q71ib8jioJU',key:'lab-composition',language:'ja',relation:'related',checked:'2026-11-25',verification:'publisher-page',note:'写真家が構図の考え方を語る日本語映像。三分割の操作手順だけを解説する動画ではありません。'}:null;
  const civic=['seats','majority'].includes(e.id)?{title:'民主主義と選挙の原則',provider:'eboard',url:'https://www.youtube.com/watch?v=CsBVfKYOqw8',id:'CsBVfKYOqw8',language:'ja',relation:'related',checked:'2026-11-25',verification:'publisher-page',note:'日本語の社会科映像。選挙と民主主義の背景を学ぶ補足で、ドント式や多数決循環だけを扱う動画ではありません。'}:null;
  const original=specific||civic||a.videos[0],v={...original,relation:'related',articleId:a.id,image:a.image,note:(specific||civic)?.note||`「${a.title}」の関連映像です。この模型そのものの操作説明ではありません。${original.note}`};
  return v;
 }
 function labMedia(e){const a=data.find(a=>a.id===e.article);if(!a)return '';const v=labVideo(e,a);
  const refs=e.references.length?e.references:a.sources;
- return `<section class="lab-media"><div class="section-heading"><div><div class="eyebrow">WATCH, READ, GO FURTHER</div><h2>見て、読んで、もう少し。</h2><p>日本語で確認できる参考映像と資料。映像の対象範囲は各説明に記載しています。</p></div></div><div class="lab-media-columns"><div>${videoCard(v)}</div><div class="lab-reading"><h3>日本語の参考資料</h3>${refs.map(r=>`<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.name)}</a>`).join('')}<button class="secondary" data-article="${e.article}">関連する展示を読む</button><p class="fine">モデル・作例：Curiosity Lab。資料の文章を再現したものではありません。参考映像の全編採点は未実施。公開元の案内確認：${e.checked}。</p></div></div></section>`;
+ return `<section class="lab-media"><div class="section-heading"><div><div class="eyebrow">WATCH, READ, GO FURTHER</div><h2>見て、読んで、もう少し。</h2><p>日本語で確認できる参考映像と資料。映像の対象範囲は各説明に記載しています。</p></div></div><div class="lab-media-columns"><div>${videoCard(v)}</div><div class="lab-reading"><h3>日本語の参考資料</h3>${refs.map(r=>`<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.name)}</a>`).join('')}${e.id==='pivot-playground'?'':`<button class="secondary" data-article="${e.article}">関連する展示を読む</button>`}<p class="fine">モデル・作例：Curiosity Lab。資料の文章を再現したものではありません。参考映像の全編採点は未実施。公開元の案内確認：${e.checked}。</p></div></div></section>`;
 }
 function labControlHTML(e,v){return e.controls.map(c=>`<label class="lab-control" for="lab-${c.key}"><span>${esc(c.label)}${c.type==='range'?`<output id="lab-out-${c.key}" for="lab-${c.key}">${v[c.key]}${esc(c.unit)}</output>`:''}</span>${c.type==='select'?`<select id="lab-${c.key}" data-lab-value="${c.key}">${c.options.map((x,i)=>`<option value="${i}" ${v[c.key]===i?'selected':''}>${esc(x)}</option>`).join('')}</select>`:`<input type="range" id="lab-${c.key}" data-lab-value="${c.key}" min="${c.min}" max="${c.max}" step="${c.step}" value="${v[c.key]}">`}</label>`).join('')}
 let labAudio;
@@ -178,7 +233,12 @@ function setupExperiment(){
  if(['pendulum','illusion','chance'].includes(e.id)){expType=e.id;setupLegacyExperiment();if(e.id==='illusion')$('#experiment .source-list')?.remove();}
  else{
   let values=labNormalize(e,labMemory.get(e.id)||labDefaults(e));
-  function paint(){const m=labModel(e.id,values);$('#lab-visual').innerHTML=m.visual;$('#lab-result').textContent=m.result;labMemory.set(e.id,{...values});e.controls.forEach(c=>{const output=$('#lab-out-'+c.key);if(output)output.textContent=Number(values[c.key].toFixed(2))+(c.unit||'')});const pin=labPins.get(e.id);$('#lab-comparison').innerHTML=pin?`<section class="lab-previous"><div class="lab-previous-head"><h2>さっき残した条件と、比べよう。</h2><button class="secondary" id="lab-unpin">比較を閉じる</button></div><p class="fine">この起動中の比較用です。アプリを読み込み直すと消えます。</p><p>${esc(pin.conditions)}</p>${pin.visual}<p>${esc(pin.result)}</p></section>`:'';if(pin)$('#lab-unpin').onclick=()=>{labPins.delete(e.id);paint()};}
+  function paint(){
+   if(e.id==='pivot-playground'){
+    const labels=values.mode?['左手','左ひじ','腰','右ひじ','右手']:['左端','左寄り','中央','右寄り','右端'];
+    labels.forEach((label,i)=>{ $('#lab-pin'+(i+1)).previousElementSibling.textContent=`支点 ${i+1} · ${label}` });
+   }
+   const m=labModel(e.id,values);$('#lab-visual').innerHTML=m.visual;$('#lab-result').textContent=m.result;labMemory.set(e.id,{...values});e.controls.forEach(c=>{const output=$('#lab-out-'+c.key);if(output)output.textContent=Number(values[c.key].toFixed(2))+(c.unit||'')});const pin=labPins.get(e.id);$('#lab-comparison').innerHTML=pin?`<section class="lab-previous"><div class="lab-previous-head"><h2>さっき残した条件と、比べよう。</h2><button class="secondary" id="lab-unpin">比較を閉じる</button></div><p class="fine">この起動中の比較用です。アプリを読み込み直すと消えます。</p><p>${esc(pin.conditions)}</p>${pin.visual}<p>${esc(pin.result)}</p></section>`:'';if(pin)$('#lab-unpin').onclick=()=>{labPins.delete(e.id);paint()};}
   function controls(){ $('#lab-controls').innerHTML=labControlHTML(e,values);$$('[data-lab-value]').forEach(input=>{const update=()=>{values=labNormalize(e,{...values,[input.dataset.labValue]:input.value});paint()};input.addEventListener(input.tagName==='SELECT'?'change':'input',update)}); }
   controls();paint();
   const soundButton=$('#lab-sound');
