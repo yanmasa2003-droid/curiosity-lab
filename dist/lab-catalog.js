@@ -2,6 +2,117 @@
 const LAB_GROUPS=[{"name":"社会と制度","en":"SOCIETY","ink":"#174f58","bg":"#d5ece8","image":"city"},{"name":"言葉と対話","en":"WORDS","ink":"#714c68","bg":"#f1e0eb","image":"writing"},{"name":"歴史と文化","en":"HISTORY","ink":"#805337","bg":"#f1e2cf","image":"history"},{"name":"芸術とデザイン","en":"ART","ink":"#4b4e8c","bg":"#e5e4f7","image":"tools"},{"name":"暮らしと料理","en":"EVERYDAY","ink":"#946039","bg":"#f7ead7","image":"kitchen"},{"name":"心理とデータ","en":"MIND","ink":"#805260","bg":"#f2e1dc","image":"forest"},{"name":"自然と生きもの","en":"NATURE","ink":"#416b44","bg":"#e2edda","image":"forest"},{"name":"科学と偶然","en":"SCIENCE","ink":"#386c88","bg":"#e1eef5","image":"ocean"}];
 const LAB_EXPERIMENTS=[
  {
+ "id": "pivot-playground",
+ "group": "科学と偶然",
+ "title": "支点を５つ置いたら？",
+ "short": "シーソーと関節人形に、空中の支点を置いてみよう。",
+ "article": "wave",
+ "controls": [
+  {
+   "key": "mode",
+   "label": "模型",
+   "type": "select",
+   "options": [
+    "シーソー",
+    "関節人形"
+   ],
+   "value": 0
+  },
+  {
+   "key": "pin1",
+   "label": "支点 1",
+   "type": "select",
+   "options": [
+    "外す",
+    "固定する"
+   ],
+   "value": 0
+  },
+  {
+   "key": "pin2",
+   "label": "支点 2",
+   "type": "select",
+   "options": [
+    "外す",
+    "固定する"
+   ],
+   "value": 0
+  },
+  {
+   "key": "pin3",
+   "label": "支点 3",
+   "type": "select",
+   "options": [
+    "外す",
+    "固定する"
+   ],
+   "value": 1
+  },
+  {
+   "key": "pin4",
+   "label": "支点 4",
+   "type": "select",
+   "options": [
+    "外す",
+    "固定する"
+   ],
+   "value": 0
+  },
+  {
+   "key": "pin5",
+   "label": "支点 5",
+   "type": "select",
+   "options": [
+    "外す",
+    "固定する"
+   ],
+   "value": 0
+  },
+  {
+   "key": "load",
+   "label": "力を加える場所",
+   "type": "select",
+   "options": [
+    "左端 / 左手",
+    "中央 / 腰",
+    "右端 / 右手"
+   ],
+   "value": 0
+  },
+  {
+   "key": "force",
+   "label": "下向きの力（模型内）",
+   "type": "range",
+   "min": 0,
+   "max": 100,
+   "step": 1,
+   "value": 60,
+   "unit": "%"
+  }
+ ],
+ "preset": {
+  "mode": 0,
+  "pin1": 1,
+  "pin2": 0,
+  "pin3": 1,
+  "pin4": 0,
+  "pin5": 0,
+  "load": 0,
+  "force": 60
+ },
+ "prompt": "まずシーソーの支点①と③を固定。③だけ外して右端を押すと、今度はどこを中心に回る？ 関節人形でも①と③を固定して残りの部位を見てみよう。",
+ "explain": "硬い板は、離れた２点を空間に固定すると平面内では回れません。人形は手や腰を固定しても、間に関節があるので、固定していない部位が動ける場合があります。青い丸が支点、橙の矢印が力を加える位置です。",
+ "limit": "支点は上下左右に動かない架空のピンです。板は変形や重さを省いた２次元モデルです。人形は棒と関節の模型で、自重・筋肉・関節の可動域・床との接触を省いています。橙の矢印は入力だけを示します。",
+ "references": [
+  {
+   "name": "小学校第６学年 てこのしくみとはたらき（三条市）",
+   "url": "https://www.city.sanjo.niigata.jp/material/files/group/29/teaching_plan_6.pdf",
+   "language": "ja"
+  }
+ ],
+ "checked": "2026-11-25"
+},
+ {
   "id": "seat-formulas",
   "group": "社会と制度",
   "title": "同じ票を、二つの式で数える",

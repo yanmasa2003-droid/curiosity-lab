@@ -6,8 +6,8 @@ const content=JSON.parse(fs.readFileSync('dist/content.json'));
 const ctx=vm.createContext({document:{addEventListener(){}},location:{hash:'#lab'},data:content.articles,esc:x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),videoCard:v=>`<div>${v.title} ${v.url}</div>`});
 vm.runInContext(fs.readFileSync('dist/lab-catalog.js','utf8')+'\n'+fs.readFileSync('dist/labs.js','utf8')+'\nthis.catalog=LAB_EXPERIMENTS;this.groups=LAB_GROUPS;this.math=LabMath;',ctx);
 const plain=x=>JSON.parse(JSON.stringify(x));
-test('31 experiments span eight genres with live exhibit links and Japanese media',()=>{
- assert.equal(ctx.catalog.length,31);assert.equal(new Set(ctx.catalog.map(e=>e.id)).size,31);assert.equal(ctx.groups.length,8);
+test('32 experiments span eight genres with live exhibit links and Japanese media',()=>{
+ assert.equal(ctx.catalog.length,32);assert.equal(new Set(ctx.catalog.map(e=>e.id)).size,32);assert.equal(ctx.groups.length,8);
  for(const g of ctx.groups)assert.ok(ctx.catalog.filter(e=>e.group===g.name).length>=3,g.name);
  for(const e of ctx.catalog){const a=content.articles.find(a=>a.id===e.article);assert.ok(a,e.id);assert.ok(a.videos.some(v=>['ja','ja-subtitles','ja-text'].includes(v.language)),e.id);assert.ok(e.explain.length>50&&e.limit.length>25,e.id);for(const s of e.references){assert.equal(s.language,'ja');assert.equal(new URL(s.url).protocol,'https:')};ctx.fixture=e;assert.match(vm.runInContext('labMedia(fixture)',ctx),/日本語の参考資料/)}
 });
@@ -41,7 +41,7 @@ test('packing, parallel work, clocks and selection retain their model invariants
  for(let t=0;t<=20;t++){assert.ok(Math.abs(ctx.math.selection(50,1,t)-50)<1e-9);assert.ok(ctx.math.selection(50,1.2,t)>=50);assert.ok(ctx.math.selection(50,.8,t)<=50)}
 });
 test('gallery filtering and every direct experiment route render a complete experience',()=>{
- assert.equal((vm.runInContext('lab()',ctx).match(/class="lab-tile"/g)||[]).length,31);
+ assert.equal((vm.runInContext('lab()',ctx).match(/class="lab-tile"/g)||[]).length,32);
  vm.runInContext("labGroup='歴史と文化'",ctx);assert.equal((vm.runInContext('lab()',ctx).match(/class="lab-tile"/g)||[]).length,5);
  for(const e of ctx.catalog){ctx.location.hash='#lab-'+e.id;const html=vm.runInContext('lab()',ctx);assert.match(html,/lab-workshop/);assert.match(html,/日本語の参考資料/);assert.match(html,/いまの発見をGPTへコピー/)}
 });
