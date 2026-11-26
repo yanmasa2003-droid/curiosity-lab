@@ -6,3 +6,31 @@
 @media(max-width:600px){.lab-cover h1{font-size:clamp(30px,8.6vw,39px)}}
 .lab-word-stack,.lab-paper-stack{display:grid;gap:14px;padding:14px;min-height:260px;align-content:center}.lab-word-unit{background:#fff9;padding:18px 20px;border-left:4px solid var(--word-ink);font-size:17px;line-height:1.85;border-radius:4px}.lab-word-unit small{display:block;color:var(--word-ink);font-size:14px;margin-bottom:8px}.lab-paper-stack{grid-template-columns:repeat(3,1fr);align-content:stretch}.lab-paper{padding:24px 18px;background:#fff8e8;border:1px solid #b9a88e;box-shadow:3px 4px 0 #ab8d5c19;align-self:center}.lab-paper small{font-size:14px;line-height:1.8;color:#82684c}.lab-paper p{font:400 23px/1.9 var(--serif);margin:15px 0;color:#68513a}.lab-previous .lab-word-stack,.lab-previous .lab-paper-stack{min-height:0}.lab-previous .lab-paper{padding:15px}@media(max-width:700px){.lab-paper-stack{grid-template-columns:1fr}.lab-paper{padding:20px}.lab-paper p{font-size:21px;margin:6px 0}.lab-word-unit{font-size:17px;padding:16px}}
 .lab-model-label{font-size:14px!important;line-height:1.7!important;margin:8px 14px 0!important;color:var(--lab-ink)}
+
+.pivot-workshop {grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);align-items:start}
+.pivot-workshop .lab-stage {padding-top:22px}
+.pivot-workshop .lab-console h2 {margin-bottom:15px}
+.pivot-guide {font-size:13px;line-height:1.65;margin:8px 0;color:#355a67}
+.pivot-placing #lab-visual {cursor:crosshair;outline:2px solid #23849a;border-radius:12px;touch-action:manipulation}
+.pivot-controls {display:grid;gap:12px}
+.pivot-controls fieldset {min-width:0;margin:0;padding:10px;border:1px solid #a6c6cf;border-radius:10px;background:#f9fcfd}
+.pivot-controls legend {font-size:14px;font-weight:700;padding:0 5px}
+.pivot-controls button,.pivot-controls select,.pivot-controls input[type=number] {min-height:44px;border:1px solid #aac3cb;border-radius:7px;background:white;color:#285265;font:inherit;font-size:16px}
+.pivot-controls button {padding:5px 8px;cursor:pointer}
+.pivot-controls button:disabled {opacity:.5;cursor:default}
+.pivot-row {display:flex;align-items:center;gap:7px;margin-bottom:6px}
+.pivot-row select {min-width:0;flex:1;padding:0 5px}
+.pivot-row input[type=number] {width:65px;padding:0 5px}
+.pivot-row .pivot-slot {min-width:44px;font-weight:700;color:#1d647c}
+.pivot-load .pivot-slot {color:#aa4825}
+.pivot-slot[aria-pressed=true] {background:#1d647c;color:#fff}
+.pivot-load {border-bottom:1px solid #d0dfe3;margin:0 0 8px;padding:0 0 5px}
+.pivot-load label {display:grid;grid-template-columns:2em 3em minmax(0,1fr);align-items:center;gap:5px;font-size:14px}
+.pivot-load output {text-align:right;font-variant-numeric:tabular-nums}
+.pivot-load input[type=range] {height:34px;width:100%;margin:0;accent-color:#aa4825}
+.pivot-preset {margin:12px 0}
+@media (max-width:740px) {
+ .pivot-workshop {grid-template-columns:minmax(0,1fr)}
+ .pivot-workshop .lab-stage {padding:12px 10px 0}
+ .pivot-workshop .lab-console {padding:18px 14px}
+}
